@@ -1,0 +1,98 @@
+page {
+  background: #f2f6ff;
+}
+
+.header {
+  background: #fff;
+  border-bottom: 1rpx solid #e8edf4;
+}
+
+.pickSelHeight{
+  color:red;
+}
+/*日期查询*/
+
+.date-select {
+  background: #fff;
+}
+
+.date-select view {
+  width: 120rpx;
+  height: 64rpx;
+  text-align: center;
+  background: #d3d7f4;
+  color: #fff;
+  border-radius: 5rpx;
+  margin-right: 15rpx;
+  line-height: 64rpx;
+}
+
+.active {
+  background: #35307b !important;
+}
+
+/*搜索框*/
+.data-search {
+  margin: 0rpx 24rpx 24rpx 24rpx;
+}
+.data-search .title {
+  line-height: 50rpx;
+}
+
+.input-date {
+  border: 1px solid #d4d8f5;
+  border-radius: 5rpx;
+  width: 240rpx;
+  height: 64rpx;
+  padding: 0px 10rpx;
+  font: normal normal 24rpx/64rpx "";
+}
+
+.search-btn {
+  width: 120rpx;
+  height: 66rpx;
+  line-height: 66rpx;
+  background: #35307b;
+  color: #fff;
+  margin-left:10rpx;
+}
+.split{
+  margin:0rpx 10rpx;
+  height:64rpx;
+  line-height:64rpx;
+  color:#d4d8f5;
+}
+
+/*账单*/
+ .table{
+  overflow-y: auto;
+  height: 65%;
+} 
+.tr {
+  display: flex;
+  border-bottom: 1rpx solid #e8edf4;
+  align-content: center;
+}
+
+.th {
+  height: 110rpx;
+  line-height: 110rpx;
+  width: 50%;
+  background: #d3d7f4;
+  text-align: center;
+}
+
+.td {
+  height: 110rpx;
+  line-height: 110rpx;
+  width: 50%;
+  text-align: center;
+  align-items: center;
+  vertical-align: middle;
+  border-right: 1rpx solid #e8edf4;
+  background:#ffffff;
+}
+
+.td1 {
+  border-left: 1rpx solid #e8edf4;
+}

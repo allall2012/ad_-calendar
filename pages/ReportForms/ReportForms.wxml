@@ -1,0 +1,79 @@
+<view class="header">
+  <view class="box bg-main m24 date-select">
+    <block wx:if="{{todaySearch}}">
+      <view class="active fs24" bindtap="searchType" data-id="todaySearch">今日</view>
+    </block>
+    <block wx:else>
+      <view class="fs24" bindtap="searchType" data-id="todaySearch">今日</view>
+    </block>
+    <block wx:if="{{tomorrowSearch}}">
+      <view class="active fs24" bindtap="searchType" data-id="tomorrowSearch">明日</view>
+    </block>
+    <block wx:else>
+      <view class="fs24" bindtap="searchType" data-id="tomorrowSearch">明日</view>
+    </block>
+    <block wx:if="{{weekSearch}}">
+      <view class="active fs24" bindtap="searchType" data-id="weekSearch">本周</view>
+    </block>
+    <block wx:else>
+      <view class="fs24" bindtap="searchType" data-id="weekSearch">本周</view>
+    </block>
+    <block wx:if="{{monthSearch}}">
+      <view class="active fs24" bindtap="searchType" data-id="monthSearch">本月</view>
+    </block>
+    <block wx:else>
+      <view class="fs24" bindtap="searchType" data-id="monthSearch">本月</view>
+    </block>
+  </view>
+  <view class="data-search">
+    <view class="title">自定义</view>
+    <view class="box mt_10">
+      <view>
+        <picker mode="date" value="{{startDate}}" start="2015-09-01" end="2017-09-01" bindchange="bindStartDateChange">
+          <view class="picker">
+            <input class="input-date" disabled="false" placeholder='请选择开始日期' value="{{startDate}}" />
+          </view>
+        </picker>
+
+      </view>
+      <view class="split">-</view>
+      <picker mode="date" value="{{endDate}}" start="2015-09-01" end="2017-09-01" bindchange="bindEndDateChange">
+        <view>
+          <input class="input-date" disabled="false" placeholder='请选择结束日期' value="{{endDate}}" />
+        </view>
+      </picker>
+      <view>
+        <button class="search-btn fs24" bindtap='search'>查询</button>
+      </view>
+    </view>
+  </view>
+</view>
+
+<view class="table m24">
+  <view class="tr">
+    <view class="th" style='border-top-left-radius:10rpx;'>账号</view>
+    <view class="th" style='border-top-right-radius:10rpx;'>总金额(元)</view>
+  </view>
+  <view class="tr" wx:for="{{report}}" wx:key="">
+    <view class="td td1">{{item.name}}</view>
+    <view class="td">{{item.ad_price}}</view>
+  </view>
+  <view class="tr">
+    <view class="th" style='border-bottom-left-radius:10rpx;'>总计金额</view>
+    <view class="th" style='border-bottom-right-radius:10rpx;'>{{total}}</view>
+  </view>
+</view>
+<view class="footer">
+  <view class="box">
+    <view class="flex text-center">
+      <navigator url='/pages/OfficialAccounts/OfficialAccounts' open-type="redirect" hover-class="none">
+        <image src="/image/icon_gongzhonghao_h.png" class="wh44 mt16"></image>
+        <view class="fs20 lose-focus-color">公众号</view>
+      </navigator>
+    </view>
+    <view class="flex text-center">
+      <image src="/image/icon_baobiao_l.png" class="wh44 mt16"></image>
+      <view class="fs20">报表</view>
+    </view>
+  </view>
+</view>

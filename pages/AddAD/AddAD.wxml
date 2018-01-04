@@ -1,0 +1,134 @@
+<view class="{{addPanelState}}">
+  <view class="container">
+    <view class="text-right">
+      <!-- <navigator url='/pages/index/index' hover-class="none" open-type="redirect"> -->
+      <image src='/image/icon_close.png' class="close" bindtap="toClose"></image>
+      <!-- </navigator> -->
+      <view class="form">
+        <view class="line box">
+          <view class="fs32">登记者</view>
+          <view class="fs32 text-right">{{ad.fans.name}}</view>
+        </view>
+        <view class="line box">
+          <view class="fs32">发布日期</view>
+          <view class="fs32 text-right">
+
+            <picker mode="date" value="{{date}}" style="width:220rpx;" start="2015-09-01" end="2030-09-01" bindchange="bindDateChange">
+              <view class="picker">
+                <view class="pull-right">
+                  <image src='/image/icon_left_1.png' class="right-arrows pull-right"></image>
+                </view>
+                <view class="pull-right"> {{date}}</view>
+              </view>
+            </picker>
+          </view>
+        </view>
+        <view class="line box">
+          <view class="fs32">广告主体名称</view>
+          <view class="fs32 text-right">
+            <input value="{{ad.ad_name}}" bindinput='adName' />
+          </view>
+        </view>
+        <view class="line box">
+          <view class="fs32">广告位置</view>
+          <view class="fs32 text-right">
+            <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+              <image src='/image/icon_left_1.png' class="right-arrows pull-right"></image>
+              <view class="picker pull-right">
+                {{array[index]}}
+              </view>
+            </picker>
+          </view>
+
+        </view>
+        <view class="line box">
+          <view class="fs32">广告价格</view>
+          <view class="fs32 text-right">
+            <input value="{{ad.ad_price}}" type='digit' bindinput="adPrice" />
+          </view>
+        </view>
+        <view class="line box">
+          <view class="fs32">是否预定</view>
+          <view class="fs32 text-right">
+            <radio-group class="radio-group" bindchange="isBookChange">
+              <label class="radio">
+                <radio value="0" checked="{{ad.is_book == 0 ? 'checked' : ''}}" color="#857cff" />否</label>
+              <label class="radio">
+                <radio value="1" checked="{{ad.is_book == 1 ? 'checked' : ''}}" color="#857cff" />是</label>
+            </radio-group>
+          </view>
+        </view>
+        <view class='box'>
+          <view class="fs32 lh100">通知谁</view>
+        </view>
+        <view class="box">
+          <view class="list" bindtap="showDialogBtn">
+            <image src='/image/icon_tianjia.png' class='icon'></image>
+            <view class="fs24">添加</view>
+          </view>
+          <view wx:for="{{selectNotice}}" wx:key="">
+            <view class="list">
+              <image src="{{item.avatar_url}}" class='icon'></image>
+              <view class="fs24">{{item.name}}</view>
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+  <view class="text-center" bindtap="submit">
+    <image src='/image/icon_queren.png' style="width:220rpx;height:220rpx;"></image>
+  </view>
+</view>
+
+<!--弹窗-->
+<view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
+<view class="modal-dialog" wx:if="{{showModal}}" style="width:{{modalDialogWidth}}px;">
+  <view class='text-right'>
+    <image src='/image/icon_close.png' class="close" bindtap="noticeBack"></image>
+  </view>
+  <view class="modal-content">
+    <scroll-view scroll-y="true">
+      <checkbox-group class="radio-group" bindchange="checkboxChange">
+        <view wx:for="{{notice}}" wx:key="">
+          <view class="select-list">
+            <label class="radio">
+              <checkbox value="{{item.id}}" color="#857cff" checked='{{item.checked}}' />
+              <image src='{{item.avatar_url}}' class='icon' style='position:relative;top:30rpx;'></image>
+              {{item.name}}
+            </label>
+          </view>
+        </view>
+      </checkbox-group>
+    </scroll-view>
+  </view>
+  <view class="text-center" bindtap='noticeSure'>
+    <image src='/image/icon_queren.png' style="width:220rpx;height:220rpx;"></image>
+  </view>
+</view>
+
+
+
+<!--弹窗-->
+<!-- <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
+<view class="modal-dialog" wx:if="{{showModal}}" style="width:{{modalDialogWidth}}px;">
+  <view class="modal-content">
+    <!-- <scroll-view scroll-y="true" style="height:{{modalDialogHeight}}px;"> -->
+<!-- <scroll-view scroll-y="true" style="height:70%">
+      <checkbox-group class="radio-group" bindchange="checkboxChange">
+        <view wx:for="{{notice}}" wx:key="">
+          <view class="select-list">
+            <label class="radio">
+              <checkbox value="{{item.id}}" color="#857cff" checked='{{item.checked}}' />
+              <image src='{{item.avatar_url}}' class='icon' style='position:relative;top:30rpx;'></image>
+              {{item.name}}
+            </label>
+          </view>
+        </view>
+      </checkbox-group>
+      <view class="text-center" bindtap='noticeSure'>
+        <image src='/image/icon_queren.png' style="width:220rpx;height:220rpx;"></image>
+      </view>
+    </scroll-view>
+  </view>
+</view> -->

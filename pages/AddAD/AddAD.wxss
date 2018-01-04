@@ -1,0 +1,169 @@
+page{
+  background:#9f9dd4; 
+}
+.container{
+  margin:25rpx;
+  border-radius:10rpx;
+  background:#fff;
+  padding:7rpx 25rpx 32rpx 25rpx;
+}
+.close{
+  width:25rpx;
+  height:25rpx;
+  /* margin-right:24rpx; */
+  padding:25rpx 24rpx 0rpx 24rpx;
+}
+.form{
+  margin:0rpx 30rpx;
+}
+.line{
+  height:100rpx;
+  border-bottom:1rpx solid #eaeef5;
+  justify-content:space-between;
+  align-items:center;
+}
+.lh100{
+  line-height:100rpx;
+}
+.radio .wx-radio-input {
+  border:1px solid #857cff;
+  width:32rpx;
+  height:32rpx;  
+}
+.picker{
+  color:#857cff;
+}
+.right-arrows{
+  width:11rpx;
+  height:21rpx;
+  margin:13rpx 17rpx!important;
+}
+.icon{
+  width:64rpx;
+  height:64rpx;
+  border:1px solid #857cff;
+  border-radius: 50%;
+}
+.list{
+ width:100rpx;
+ text-align: center;
+}
+
+
+.select-list{
+  font-size:32rpx;
+  line-height: 110rpx;
+  display: flex;
+  border-bottom:1px solid #eaeef5;
+  height:110rpx;
+   align-items:center;
+}
+.select-list > label{
+ width: 100%; 
+}
+
+.modal-mask {
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: #000;
+  opacity: 0.5;
+  overflow: hidden;
+  z-index: 9000;
+  color: #fff;
+}
+
+.dialog-container{
+  
+}
+.modal-dialog {  
+  width:100%;
+  display: block;
+  overflow: hidden;
+  position: fixed;
+  top: 25rpx;
+  left:25rpx;
+  z-index: 9999;
+  background: #f9f9f9;
+  border-radius: 10rpx;
+}
+
+.modal-title {
+  padding-top: 50rpx;
+  font-size: 36rpx;
+  color: #030303;
+  text-align: center;
+}
+
+.modal-content {
+  padding: 0rpx 32rpx;
+}
+
+.modal-input {
+  display: flex;
+  background: #fff;
+  border: 2rpx solid #ddd;
+  border-radius: 4rpx;
+  font-size: 28rpx;
+}
+
+
+.input {
+  width: 100%;
+  height: 82rpx;
+  font-size: 28rpx;
+  line-height: 28rpx;
+  padding: 0 20rpx;
+  box-sizing: border-box;
+  color: #333;
+}
+
+input-holder {
+  color: #666;
+  font-size: 28rpx;
+}
+
+.modal-footer {
+  display: flex;
+  flex-direction: row;
+  height: 86rpx;
+  border-top: 1px solid #dedede;
+  font-size: 34rpx;
+  line-height: 86rpx;
+}
+
+.btn-cancel {
+  width: 50%;
+  color: #666;
+  text-align: center;
+  border-right: 1px solid #dedede;
+}
+
+.btn-confirm {
+  width: 50%;
+  color: #ec5300;
+  text-align: center;
+}
+
+.radio-group >label{
+  margin-right: 40rpx;
+}
+
+/* .mask-footer{
+  position: fixed;
+  top:1000rpx;
+  width:100%;
+}
+.mask-footer >button{
+  width:35%;
+  display: inline-block;
+}
+.btn-back{
+ 
+}
+.btn-sure{
+  margin-left: 15%;
+  background-color: greenyellow;
+} */

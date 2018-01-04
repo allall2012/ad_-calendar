@@ -1,0 +1,362 @@
+/*日历*/
+
+.calendar {
+  height: 642rpx;
+}
+
+.top-handle {
+  height: 80rpx;
+}
+
+.prev {
+  text-align: right;
+  height: 80rpx;
+}
+
+.next {
+  height: 80rpx;
+}
+
+.prev-handle {
+  width: 80rpx;
+  height: 100%;
+}
+
+.next-handle {
+  width: 80rpx;
+  height: 100%;
+}
+
+.date-area {
+  width: 50%;
+  height: 80rpx;
+  text-align: center;
+}
+
+.weeks {
+  height: 54rpx;
+  line-height: 54rpx;
+}
+
+.week {
+  text-align: center;
+}
+
+.days {
+  height: 500rpx;
+}
+
+.grid {
+  width: 107.1428571429rpx;
+  height: 110rpx;
+}
+
+.day {
+  width: 80rpx;
+  height: 80rpx;
+  color: #35307b;
+  font-size: 32rpx;
+}
+
+.border-radius {
+  border-radius: 50%;
+  position: relative;
+  left: 0;
+  top: 0;
+  color: #fff;
+}
+
+.pink-bg {
+  background-color: #6c62f2;
+}
+
+.purple-bg {
+  background-color: #b8b8f1;
+}
+
+.right-triangle::after {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border: 15rpx solid transparent;
+  border-left-color: #ff629a;
+  position: absolute;
+  right: -22rpx;
+  top: 18rpx;
+}
+
+.left-triangle::before {
+  content: "";
+  display: block;
+  width: 0;
+  height: 0;
+  border: 15rpx solid transparent;
+  border-right-color: #ff629a;
+  position: absolute;
+  left: -22rpx;
+  top: 18rpx;
+}
+
+.tips {
+  text-align: center;
+  margin-top: 20rpx;
+  margin-bottom: 20rpx;
+}
+
+.types {
+  background-color: #ffedf4;
+  height: 50rpx;
+}
+
+.type-dot {
+  width: 25rpx;
+  height: 25rpx;
+  border-radius: 50%;
+  margin-right: 10rpx;
+}
+
+.type-dot-ymq {
+  color: #ff7ca0;
+  background-color: #ff7ca0;
+}
+
+.type-dot-ycq {
+  color: rgb(255, 200, 202);
+  background-color: rgb(255, 200, 202);
+}
+
+.type-dot-aqq {
+  color: rgb(118, 191, 92);
+  background-color: rgb(118, 191, 92);
+}
+
+.type-dot-yyq {
+  color: #ff7ca0;
+  background-color: #ff7ca0;
+}
+
+.type-dot-plr {
+  color: rgb(211, 189, 215);
+  background-color: rgb(211, 189, 215);
+}
+
+.types-desc {
+  padding: 0 20rpx;
+}
+
+.type-name {
+  margin-top: 50rpx;
+  margin-bottom: 30rpx;
+}
+
+.type-desc {
+  padding: 0 35rpx;
+  line-height: 38rpx;
+}
+
+.explain {
+  border-top: 1px solid #eee;
+  width: 90%;
+  margin: 20rpx 5% 20rpx 5%;
+  padding: 20rpx 0;
+}
+
+.explain-title {
+  font-weight: bold;
+  margin-bottom: 15rpx;
+}
+
+.explain-item {
+  padding: 8rpx 20rpx;
+  color: #fff;
+}
+
+.left-border-radius {
+  border-top-left-radius: 20rpx;
+  border-bottom-left-radius: 20rpx;
+}
+
+.right-border-radius {
+  border-top-right-radius: 20rpx;
+  border-bottom-right-radius: 20rpx;
+}
+
+.picker-btns {
+  height: 120rpx;
+  line-height: 120rpx;
+  border-bottom: 1rpx solid #ff7ca0;
+}
+
+.picker-confirm {
+  margin-right: 50rpx;
+}
+
+.picker-cancel {
+  margin-left: 50rpx;
+}
+
+.picker-view {
+  color: #ff7ca0;
+  text-align: center;
+}
+
+.today {
+  width: 100%;
+  text-align: center;
+  position: absolute;
+  top: 55rpx;
+  left: 0px;
+}
+
+/*图表*/
+
+.day-style {
+  left: 0rpx;
+  top: 0rpx;
+  position: absolute;
+  text-align: center;
+  height: 80rpx;
+  width: 80rpx;
+  font: normal normal 32rpx/80rpx "PingFangSC-Regular";
+}
+
+.canvas {
+  z-index: 1000000;
+  position: absolute;
+  left:0rpx;
+  top:0rpx;
+  height:80rpx;
+  width: 80rpx;
+}
+
+/*方向图标*/
+
+.icon-direction {
+  width: 18rpx;
+  height: 25rpx;
+}
+
+.weekend-color {
+  color: #ffce80 !important;
+}
+
+/*标记*/
+
+.sign-explain {
+  height: 62rpx;
+  font: normal normal 24rpx/62rpx "";
+}
+
+.sign {
+  width: 28rpx;
+  height: 28rpx;
+  margin: 17rpx 8rpx;
+  border-radius: 5rpx;
+}
+
+.sign-1 {
+  background: #ff5c92;
+}
+
+.sign-2 {
+  background: #37fad3;
+}
+
+.sign-3 {
+  background: #ffe327;
+}
+
+.info-header {
+  line-height: 82rpx;
+  border-bottom: 1rpx solid #e8edf4;
+}
+
+.icon-clock {
+  width: 20rpx;
+  height: 24rpx;
+  margin: 28rpx 30rpx 0rpx 17rpx;
+}
+
+.title {
+  font: normal bold 36rpx/82rpx "";
+  margin-left: 40rpx;
+}
+
+.info-content {
+  padding: 35rpx 30rpx;
+  font: normal normal 26rpx/46rpx "";
+}
+
+.reserve {
+  background: #d4d8f5;
+  border: 1px solid #857cff;
+  border-radius: 5px;
+  width: 64rpx;
+  height: 33rpx;
+  font: normal normal 20rpx/33rpx "";
+  text-align: center;
+  color: #6b62f2;
+  margin: 24rpx 0px 0px 11rpx;
+}
+
+.info {
+  padding: 0px 24rpx;
+  background: #fff;
+  border-radius: 5rpx;
+  -moz-box-shadow: 2px 2px 5px #eff1fe;
+  -webkit-box-shadow: 2px 2px 5px #eff1fe;
+  box-shadow: 2px 2px 5px #eff1fe;
+  position: relative;
+}
+
+.flag {
+  width: 33rpx;
+  height: 56rpx;
+  position: absolute;
+  top: -8rpx;
+  left: 10rpx;
+}
+
+/*操作面板*/
+
+.panel {
+  position: absolute;
+  top: 0rpx;
+  left: 0rpx;
+  width: 100%;
+  height: 402rpx;
+}
+
+.panel-header {
+  padding: 71rpx 0rpx;
+  background-color: rgba(255, 255, 255, 0.88);
+}
+
+.panel-header .box {
+  background-color: rgba(255, 255, 255, 0.88);
+}
+
+.add-area {
+  /* margin-top: 40rpx; */
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+}
+
+.active {
+  background: #6b62f1;
+  border-radius: 50%;
+  color: #fff;
+}
+
+.selectStyle {
+  background: #6b62f1;
+  border-radius: 50%;
+  color: #fff;
+  position: absolute;
+  text-align: center;
+  height: 77rpx;
+  width: 77rpx;
+  font: normal normal 32rpx/80rpx "PingFangSC-Regular";
+}

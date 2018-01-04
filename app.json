@@ -1,0 +1,14 @@
+{
+  "pages": [    
+    "pages/OfficialAccounts/OfficialAccounts",
+    "pages/index/index",
+    "pages/AddAD/AddAD",
+    "pages/ReportForms/ReportForms"    
+  ],
+  "window": {
+    "backgroundTextStyle": "light",
+    "navigationBarBackgroundColor": "#fff",
+    "navigationBarTitleText": "WeChat",
+    "navigationBarTextStyle": "black"
+  }
+}

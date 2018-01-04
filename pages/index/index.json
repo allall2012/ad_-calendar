@@ -1,0 +1,9 @@
+{
+  "backgroundTextStyle": "light",
+  "navigationBarBackgroundColor": "#fff",
+  "navigationBarTitleText": "广告日历",
+  "navigationBarTextStyle": "black",
+  "backgroundColor":"#f2f6ff",
+  "backgroundTextStyle":"dark",
+  "enablePullDownRefresh":true
+}

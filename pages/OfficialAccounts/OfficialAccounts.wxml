@@ -1,0 +1,30 @@
+<view class="m24 mps">
+  <view wx:for="{{mpsed}}" wx:for-item="mps" wx:key="">
+    <view class="box bg-main mt16 offcialAccount">
+        <navigator wx:for="{{mps}}" wx:key="" url='/pages/index/index?mp_id={{item.id}}'>
+          <view class="item">
+            <image src="{{item.logo}}" class="icon"></image>
+            <view class="title fs24">{{item.name}}</view>
+          </view>
+        </navigator>
+    </view>
+  </view>
+  <view class='h130'>
+     
+  </view>
+  <view class="clear"></view>
+</view>
+<view class="footer">
+  <view class="box">
+    <view class="flex text-center">
+      <image src="/image/icon_gongzhonghao.png" class="wh44 mt16"></image>
+      <view class="fs20">公众号</view>
+    </view>
+    <view class="flex text-center">
+      <navigator url='/pages/ReportForms/ReportForms' open-type="redirect" hover-class="none">
+        <image src="/image/icon_baobiao.png" class="wh44 mt16"></image>
+        <view class="fs20 lose-focus-color">报表</view>
+      </navigator>
+    </view>
+  </view>
+</view>

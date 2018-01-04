@@ -1,0 +1,130 @@
+<view class="clearfix">
+  <view class="flex box box-tb box-align-center" style="height:{{calendarHeight}};">
+    <view class="calendar pink-color box box-tb">
+      <view class="top-handle fs28 box box-lr box-align-center box-pack-center">
+        <view class="prev box box-rl" bindtap="handleCalendar" data-handle="prev">
+          <view class="prev-handle box box-lr box-align-center box-pack-center">
+            <image src='/image/icon_left.png' class="icon-direction"></image>
+          </view>
+        </view>
+        <view bindtap="chooseYearAndMonth" class="date-area box box-lr box-align-center box-pack-center">{{cur_year || "--"}} 年 {{cur_month || "--"}} 月</view>
+        <view class="next box box-lr" bindtap="handleCalendar" data-handle="next">
+          <view class="next-handle box box-lr box-align-center box-pack-center">
+            <image src='/image/icon_right.png' class="icon-direction"></image>
+          </view>
+        </view>
+      </view>
+      <view class="weeks box box-lr box-pack-center box-align-center">
+        <block wx:for="{{weeks_ch}}" wx:key="{{index}}">
+          <block wx:if="{{index==0||index==6}}">
+            <view class="flex week fs28 weekend-color" data-idx="{{index}}">{{item}} </view>
+          </block>
+          <block wx:else>
+            <view class="flex week fs28" data-idx="{{index}}">{{item}} </view>
+          </block>
+        </block>
+      </view>
+      <view class="days box box-lr box-wrap">
+        <view wx:if="{{hasEmptyGrid}}" class="grid white-color box box-align-center box-pack-center" wx:for="{{empytGrids}}" wx:key="{{index}}" data-idx="{{index}}">
+        </view>
+        <view class="grid white-color box box-align-center box-pack-center" wx:for="{{days}}" wx:key="{{index}}" data-idx="{{index}}">
+          <view data-selectDay="{{item.day}}" class="day {{item.choosed ? 'border-radius pink-bg' : ''}} box box-align-center box-pack-center relative" bindtap="tapDayItem">
+            <view class="day-style">{{item.day}}</view>
+            <!-- 加上比例图表 -->
+            <block wx:for="{{countInfo}}" wx:for-item="countItem" wx:key="">
+              <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==countItem.date}}">
+                <canvas canvas-id="canvas_{{countItem.date}}" data-id="canvas_{{countItem.date}}" class="canvas" bindtap="canvastap"></canvas>
+              </block>
+            </block>
+
+            <!-- 加上今日标识-->
+            <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==curr_time}}">
+              <view class="fs24 today">今日</view>
+            </block>
+
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view wx:if="{{showPicker}}" class="box box-tb">
+    <view class="picker-btns box box-lr box-pack-between box-align-center">
+      <view class="picker-btn picker-cancel" data-type="cancel" bindtap="tapPickerBtn">取消</view>
+      <view class="picker-btn picker-confirm" data-type="confirm" bindtap="tapPickerBtn">确定</view>
+    </view>
+    <picker-view class="flex" indicator-style="height: 50rpx;" style="width: 100%; height: 150rpx;" value="{{picker_value}}" bindchange="pickerChange">
+      <picker-view-column>
+        <view class="picker-view" wx:for="{{picker_year}}" style="line-height: 50rpx">{{item}}年</view>
+      </picker-view-column>
+      <picker-view-column>
+        <view class="picker-view" wx:for="{{picker_month}}" style="line-height: 50rpx">{{item}}月</view>
+      </picker-view-column>
+    </picker-view>
+  </view>
+</view>
+<view class="bg-color mt_20">
+  <view class="sign-explain plr_25">
+    <view class="pull-right">
+      <view class="pull-right">赠送</view>
+      <view class="pull-right sign sign-3"></view>
+    </view>
+    <view class="pull-right">
+      <view class="pull-right mr_40">次图</view>
+      <view class="pull-right sign sign-2"></view>
+    </view>
+    <view class="pull-right">
+      <view class="pull-right mr_40">头图</view>
+      <view class="pull-right sign sign-1"></view>
+    </view>
+  </view>
+
+  <view class="list plr_25" id="list" wx:for="{{ad_day}}" wx:key="">
+      <view class="info mt_20" bindtap="onPress" data-ad_id="{{item.id}}">
+        <image src="/image/icon_{{item.flag}}.png" class="flag"></image>
+        <view class="info-header clearfix">
+          <view class="pull-left">
+            <view class="pull-left title">{{item.ad_name}}</view>
+            <view class="pull-left reserve" wx:if="{{item.is_book == 1}}">预定</view>
+          </view>
+          <view class="pull-right">
+            <image src='/image/icon_time.png' class='icon-clock pull-right'></image>
+            <view class="pull-right fs26 time-color">{{item.publish_at}}</view>
+          </view>
+        </view>
+        <view class="info-content">
+          <view>登记人：{{item.fans.name}}</view>
+          <view>价格：{{item.ad_price}}元</view>
+        </view>
+     
+    </view>
+
+  </view>
+
+  <view class="panel {{panelState}}" style="top:{{panelTop}}px;left:{{panelLeft}}px">
+    <view class="panel-header">
+      <view class="box">
+        <view wx:if="{{fansinfo.role == 'admin' || ad.fans_id == fansinfo.id}}" class="flex text-center">
+          <image src="/image/icon_delete.png" class="wh_92" bindtap="toDelete"></image>
+        </view>
+        <view class="flex text-center">
+          <image src="/image/icon_bianji.png" class="wh_92" bindtap="toUpdate"></image>
+        </view>
+        <view class="flex text-center">
+          <image src="/image/icon_back.png" bindtap="close" class="wh_92"></image>
+        </view>
+      </view>
+    </view>
+
+  </view>
+
+
+  <view class="selectStyle {{showState}}" style="top:{{selectTop}}px;left:{{selectLeft}}px;z-index:99999">{{selectDay}}</view>
+  <view style="height:200rpx;"></view>
+  <navigator url='/pages/AddAD/AddAD?mp_id={{mp_id}}&date={{cur_year}}-{{cur_month}}-{{selectDay}}' style="display:inline;" open-type='navigateTo' hover-class="none">
+    <image src="/image/icon_add.png" class="wh_168" style="position:fixed;bottom:10rpx;left:{{addLeft}}px;"></image>
+  </navigator>
+  <view class="add-area text-center">
+  </view>
+
+</view>
