@@ -1,4 +1,4 @@
-<view class="clearfix">
+<view class="clearfix bg-white">
   <view class="flex box box-tb box-align-center" style="height:{{calendarHeight}};">
     <view class="calendar pink-color box box-tb">
       <view class="top-handle fs28 box box-lr box-align-center box-pack-center">
@@ -29,7 +29,12 @@
         </view>
         <view class="grid white-color box box-align-center box-pack-center" wx:for="{{days}}" wx:key="{{index}}" data-idx="{{index}}">
           <view data-selectDay="{{item.day}}" class="day {{item.choosed ? 'border-radius pink-bg' : ''}} box box-align-center box-pack-center relative" bindtap="tapDayItem">
-            <view class="day-style">{{item.day}}</view>
+            <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==curr_time}}">
+              <view class="day-style {{todayState}}">{{item.day}}</view>
+            </block>
+            <block wx:else>
+              <view class="day-style">{{item.day}}</view>
+            </block>
             <!-- 加上比例图表 -->
             <block wx:for="{{countInfo}}" wx:for-item="countItem" wx:key="">
               <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==countItem.date}}">
@@ -39,6 +44,7 @@
 
             <!-- 加上今日标识-->
             <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==curr_time}}">
+
               <view class="fs24 today">今日</view>
             </block>
 
@@ -80,23 +86,23 @@
   </view>
 
   <view class="list plr_25" id="list" wx:for="{{ad_day}}" wx:key="">
-      <view class="info mt_20" bindtap="onPress" data-ad_id="{{item.id}}">
-        <image src="/image/icon_{{item.flag}}.png" class="flag"></image>
-        <view class="info-header clearfix">
-          <view class="pull-left">
-            <view class="pull-left title">{{item.ad_name}}</view>
-            <view class="pull-left reserve" wx:if="{{item.is_book == 1}}">预定</view>
-          </view>
-          <view class="pull-right">
-            <image src='/image/icon_time.png' class='icon-clock pull-right'></image>
-            <view class="pull-right fs26 time-color">{{item.publish_at}}</view>
-          </view>
+    <view class="info mt_20" bindtap="onPress" data-ad_id="{{item.id}}">
+      <image src="/image/icon_{{item.flag}}.png" class="flag"></image>
+      <view class="info-header clearfix">
+        <view class="pull-left">
+          <view class="pull-left title">{{item.ad_name}}</view>
+          <view class="pull-left reserve" wx:if="{{item.is_book == 1}}">预定</view>
         </view>
-        <view class="info-content">
-          <view>登记人：{{item.fans.name}}</view>
-          <view>价格：{{item.ad_price}}元</view>
+        <view class="pull-right">
+          <image src='/image/icon_time.png' class='icon-clock pull-right'></image>
+          <view class="pull-right fs26 time-color">{{item.publish_at}}</view>
         </view>
-     
+      </view>
+      <view class="info-content">
+        <view>登记人：{{item.fans.name}}</view>
+        <view>价格：{{item.ad_price}}元</view>
+      </view>
+
     </view>
 
   </view>
@@ -122,9 +128,24 @@
   <view class="selectStyle {{showState}}" style="top:{{selectTop}}px;left:{{selectLeft}}px;z-index:99999">{{selectDay}}</view>
   <view style="height:200rpx;"></view>
   <navigator url='/pages/AddAD/AddAD?mp_id={{mp_id}}&date={{cur_year}}-{{cur_month}}-{{selectDay}}' style="display:inline;" open-type='navigateTo' hover-class="none">
-    <image src="/image/icon_add.png" class="wh_168" style="position:fixed;bottom:10rpx;left:{{addLeft}}px;"></image>
+    <image src="/image/icon_add.png" class="wh_168" style="position:fixed;bottom:110rpx;left:{{addLeft}}px;"></image>
   </navigator>
   <view class="add-area text-center">
   </view>
 
+</view>
+
+<view class="footer">
+  <view class="box">
+    <view class="flex text-center">
+      <image src="/image/icon_gongzhonghao.png" class="wh44 mt16"></image>
+      <view class="fs20">公众号</view>
+    </view>
+    <view class="flex text-center">
+      <navigator url='/pages/ReportForms/ReportForms' open-type="redirect" hover-class="none">
+        <image src="/image/icon_baobiao.png" class="wh44 mt16"></image>
+        <view class="fs20 lose-focus-color">报表</view>
+      </navigator>
+    </view>
+  </view>
 </view>

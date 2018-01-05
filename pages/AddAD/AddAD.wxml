@@ -88,8 +88,8 @@
     <image src='/image/icon_close.png' class="close" bindtap="noticeBack"></image>
   </view>
   <view class="modal-content">
-    <scroll-view scroll-y="true">
-      <checkbox-group class="radio-group" bindchange="checkboxChange">
+    <scroll-view scroll-y="true" style="height:667rpx;">
+      <checkbox-group class="radio-group" bindchange="checkboxChange" style="height:870rpx;">
         <view wx:for="{{notice}}" wx:key="">
           <view class="select-list">
             <label class="radio">

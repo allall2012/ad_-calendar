@@ -30,6 +30,8 @@ const conf = {
     selectDate: '',
     calendarHeight: '630rpx',
     addLeft:100,
+    todayState:'today-skin',
+    type:'',//如何访问 share 通过分享进入
     countInfo: [
       {
         date: '2017-12-10',
@@ -37,12 +39,6 @@ const conf = {
         secondCount: 40,
         giveCount: 30
       },
-      {
-        date: '2017-12-25',
-        firstCount: 60,
-        secondCount: 60,
-        giveCount: 30
-      }
     ]
   },
   onLoad(options) {
@@ -52,6 +48,13 @@ const conf = {
         url: '/pages/OfficialAccounts/OfficialAccounts',
       })
     }
+    var type = options.type || '';
+  
+
+    this.setData({
+      mp_id: mp_id,
+      type:type,
+    });
     var that = this;
     const date = new Date();
     const cur_year = date.getFullYear();
@@ -83,7 +86,8 @@ const conf = {
           domain: app.globalData.domain,
           rd_session: userinfo.rd_session,
           userinfo: userinfo.userinfo,
-          mp_id:options.mp_id
+         
+
         });
         var cur_year = that.data.cur_year;
         var cur_month = that.data.cur_month;
@@ -134,7 +138,8 @@ const conf = {
     wx.request({
       url: that.data.domain + '/api/mp/'+that.data.mp_id,
       data: {
-        rd_session: that.data.rd_session
+        rd_session: that.data.rd_session,
+        type:that.data.type,
       },
       success: function (res) {
         if (res.data.errcode == 0) {
@@ -164,6 +169,7 @@ const conf = {
         mp_id:that.data.mp_id,
         year:year,
         month:month,
+        type:that.data.type,
       },
       success: function (res) {
         if (res.data.errcode == 0) {
@@ -399,10 +405,12 @@ const conf = {
     this.setData(o);
   },
   onShareAppMessage() {
+    var mp_id = this.data.mp_id;
+    var scene = '?mp_id=' + mp_id + "&type=share";
     return {
       title: '广告日历',
       desc: '广告日历',
-      path: 'pages/index/index'
+      path: 'pages/index/index'+scene
     };
   },
   onPress(event) {
@@ -514,6 +522,7 @@ const conf = {
   
     this.setData({
       panelState:'hidden',
+      todayState:''
     })
     for (var i in countInfos) {
       if (countInfos[i].date == selectTime) {

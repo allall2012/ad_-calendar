@@ -14,6 +14,7 @@
   </view>
   <view class="clear"></view>
 </view>
+
 <view class="footer">
   <view class="box">
     <view class="flex text-center">

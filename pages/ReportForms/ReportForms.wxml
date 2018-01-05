@@ -29,7 +29,7 @@
     <view class="title">自定义</view>
     <view class="box mt_10">
       <view>
-        <picker mode="date" value="{{startDate}}" start="2015-09-01" end="2017-09-01" bindchange="bindStartDateChange">
+        <picker mode="date" value="{{startDate}}" start="2015-09-01" end="2020-09-01" bindchange="bindStartDateChange">
           <view class="picker">
             <input class="input-date" disabled="false" placeholder='请选择开始日期' value="{{startDate}}" />
           </view>
@@ -37,7 +37,7 @@
 
       </view>
       <view class="split">-</view>
-      <picker mode="date" value="{{endDate}}" start="2015-09-01" end="2017-09-01" bindchange="bindEndDateChange">
+      <picker mode="date" value="{{endDate}}" start="2015-09-01" end="2020-09-01" bindchange="bindEndDateChange">
         <view>
           <input class="input-date" disabled="false" placeholder='请选择结束日期' value="{{endDate}}" />
         </view>
@@ -54,15 +54,18 @@
     <view class="th" style='border-top-left-radius:10rpx;'>账号</view>
     <view class="th" style='border-top-right-radius:10rpx;'>总金额(元)</view>
   </view>
+  <scroll-view style="height:560rpx;background:#fff;" scroll-y="true">
   <view class="tr" wx:for="{{report}}" wx:key="">
     <view class="td td1">{{item.name}}</view>
     <view class="td">{{item.ad_price}}</view>
   </view>
+  </scroll-view>
   <view class="tr">
     <view class="th" style='border-bottom-left-radius:10rpx;'>总计金额</view>
     <view class="th" style='border-bottom-right-radius:10rpx;'>{{total}}</view>
   </view>
 </view>
+
 <view class="footer">
   <view class="box">
     <view class="flex text-center">

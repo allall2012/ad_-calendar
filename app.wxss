@@ -164,6 +164,9 @@ page {
 .bg-main{
   background:#f2f6ff;
 }
+.bg-white{
+  background:#fff;
+}
 .brown-color {
   color: #784344;
 }

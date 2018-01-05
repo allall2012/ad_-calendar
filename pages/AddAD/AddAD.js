@@ -18,7 +18,8 @@ Page({
     userinfo:'',
     ad:{},
     ad_id:'',
-    notice:'',//所有人可以被通知的人
+    mp_id:'',
+    notice:'',//所有可以被通知的人
     selectNotice:'',//已选择的通知人
     fansinfo:'',//自己的个人信息
     checkBox:[],//勾选的 通知人
@@ -88,7 +89,8 @@ Page({
     wx.request({
       url: that.data.domain + '/api/notice/',
       data:{
-        rd_session:that.data.rd_session
+        rd_session:that.data.rd_session,
+        mp_id:that.data.mp_id,
       },
       success:function(res){
         if(res.data.errcode == 0){
@@ -158,6 +160,11 @@ Page({
             });
 
             that.getNotice();
+          }else{
+            wx.showModal({
+              title: '提示',
+              content: res.data.errmsg,
+            })
           }
         }
       })

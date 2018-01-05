@@ -1,5 +1,7 @@
 /*日历*/
-
+page{
+  background:#f2f6ff;
+}
 .calendar {
   height: 642rpx;
 }
@@ -209,8 +211,12 @@
   left: 0px;
 }
 
+.today-skin{
+  background:#6b62f1;
+  color:#fff;
+  border-radius: 50%;
+}
 /*图表*/
-
 .day-style {
   left: 0rpx;
   top: 0rpx;
