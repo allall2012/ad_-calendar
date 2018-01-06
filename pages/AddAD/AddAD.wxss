@@ -47,6 +47,7 @@ page{
 .list{
  width:100rpx;
  text-align: center;
+ float: left;
 }
 
 
@@ -152,19 +153,3 @@ input-holder {
   margin-right: 40rpx;
 }
 
-/* .mask-footer{
-  position: fixed;
-  top:1000rpx;
-  width:100%;
-}
-.mask-footer >button{
-  width:35%;
-  display: inline-block;
-}
-.btn-back{
- 
-}
-.btn-sure{
-  margin-left: 15%;
-  background-color: greenyellow;
-} */

@@ -66,8 +66,8 @@
             <image src='/image/icon_tianjia.png' class='icon'></image>
             <view class="fs24">添加</view>
           </view>
-          <view wx:for="{{selectNotice}}" wx:key="">
-            <view class="list">
+          <view>
+            <view class="list" wx:for="{{selectNotice}}" wx:key="">
               <image src="{{item.avatar_url}}" class='icon'></image>
               <view class="fs24">{{item.name}}</view>
             </view>
@@ -106,29 +106,3 @@
     <image src='/image/icon_queren.png' style="width:220rpx;height:220rpx;"></image>
   </view>
 </view>
-
-
-
-<!--弹窗-->
-<!-- <view class="modal-mask" bindtap="hideModal" catchtouchmove="preventTouchMove" wx:if="{{showModal}}"></view>
-<view class="modal-dialog" wx:if="{{showModal}}" style="width:{{modalDialogWidth}}px;">
-  <view class="modal-content">
-    <!-- <scroll-view scroll-y="true" style="height:{{modalDialogHeight}}px;"> -->
-<!-- <scroll-view scroll-y="true" style="height:70%">
-      <checkbox-group class="radio-group" bindchange="checkboxChange">
-        <view wx:for="{{notice}}" wx:key="">
-          <view class="select-list">
-            <label class="radio">
-              <checkbox value="{{item.id}}" color="#857cff" checked='{{item.checked}}' />
-              <image src='{{item.avatar_url}}' class='icon' style='position:relative;top:30rpx;'></image>
-              {{item.name}}
-            </label>
-          </view>
-        </view>
-      </checkbox-group>
-      <view class="text-center" bindtap='noticeSure'>
-        <image src='/image/icon_queren.png' style="width:220rpx;height:220rpx;"></image>
-      </view>
-    </scroll-view>
-  </view>
-</view> -->
