@@ -72,6 +72,12 @@ page {
   display: flex;
   border-bottom: 1rpx solid #e8edf4;
   align-content: center;
+  
+}
+.foot-tr{
+  width:100%;
+  position: fixed;
+  bottom:130rpx;
 }
 
 .th {

@@ -18,6 +18,7 @@ Page({
     userinfo:'',
     report:'',
     total:'',
+    height:0
   },
 
   /**
@@ -47,7 +48,21 @@ Page({
           wx.hideLoading();
         }, 1000);
         that.setDate();
-
+        wx.getSystemInfo({
+          success: function (res) {
+            console.log(res);
+            var screenWidth = res.windowWidth;
+            var screenHeight = res.screenHeight;
+            that.setData({
+              height:screenHeight - 410
+            })
+            var left = (screenWidth * 78 / 750) / 2;
+            var top = (screenWidth * 78 / 750) / 2;
+            var elWidth = screenWidth * 79 / 750;
+            var elHeight = screenWidth * 79 / 750;
+            console.log(left, top);
+          }
+        })
 
       }
     }, 100);
@@ -103,6 +118,8 @@ Page({
   onShareAppMessage: function () {
   
   },
+
+  
   bindStartDateChange: function (e) {  
     this.setData({
       startDate: e.detail.value

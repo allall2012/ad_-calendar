@@ -31,10 +31,12 @@ const conf = {
     calendarHeight: '630rpx',
     addLeft:100,
     todayState:'today-skin',
-    type:'',//如何访问 share 通过分享进入
+    type: '',//如何访问 share 通过分享进入
+    no_data:false,//当日有无广告
+    today_ad:'',//当日 广告图标占比
     countInfo: [
       {
-        date: '2017-12-10',
+        date: '2018-1-20',
         firstCount: 0,
         secondCount: 40,
         giveCount: 30
@@ -42,18 +44,22 @@ const conf = {
     ]
   },
   onLoad(options) {
-    var mp_id = options.mp_id || '';
+     var mp_id = options.mp_id || '';
     if(mp_id == ''){
       wx.redirectTo({
         url: '/pages/OfficialAccounts/OfficialAccounts',
       })
     }
+    var mps = wx.getStorageSync('mps');
+    var mp = mps[mp_id];
+    console.log(mp);
+    wx.setNavigationBarTitle({
+      title: mp.name
+    })
     var type = options.type || '';
-  
-
     this.setData({
       mp_id: mp_id,
-      type:type,
+      type: type,
     });
     var that = this;
     const date = new Date();
@@ -86,15 +92,11 @@ const conf = {
           domain: app.globalData.domain,
           rd_session: userinfo.rd_session,
           userinfo: userinfo.userinfo,
-         
-
         });
         var cur_year = that.data.cur_year;
         var cur_month = that.data.cur_month;
         that.calculateEmptyGrids(cur_year, cur_month);
         that.calculateDays(cur_year, cur_month);
-
-
         setTimeout(function () {
           wx.hideLoading();
         }, 1000);
@@ -169,17 +171,15 @@ const conf = {
         mp_id:that.data.mp_id,
         year:year,
         month:month,
-        type:that.data.type,
+        type:that.data.type
       },
       success: function (res) {
         if (res.data.errcode == 0) {
-         
           var ads = res.data.data;
           var countInfo = new Array();
           var temp = new Array();
           var adsDate = new Array();
           ads.forEach(function(val){
-           
             if (adsDate[val.publish_at] == undefined) {
               adsDate[val.publish_at] = new Array();
             }
@@ -214,14 +214,26 @@ const conf = {
           for(var item in temp){
             countInfo.push(temp[item]);
           }
-          // var ad_day = adsDate[that.data.curr_time] || [];
-          that.setData({
-            ads: res.data.data,
-            adsDate:adsDate,
-            countInfo:countInfo,
+          var ad_day = adsDate[that.data.curr_time] || [];
+           that.setData({
+             ads: res.data.data,
+             adsDate:adsDate,
+             countInfo:countInfo
           });
           that.getAdDay(that.data.curr_time);
+
           that.setIcon();
+
+          var today_ad = that.data.today_ad;
+          var curr_time = that.data.curr_time;
+          //设置今日为选中状态
+          that.addCharts(curr_time, today_ad.firstCount, today_ad.secondCount, today_ad.giveCount, '#6b62f1', '#ffffff', false);
+
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: res.data.errmsg,
+          })
         }
       }
     })
@@ -229,16 +241,29 @@ const conf = {
   getAdDay(time){//设置当前选择日期的 广告
     var adsDate = this.data.adsDate;
     var ad_day = adsDate[time] || [];
+    var no_data = true;
+    if(ad_day.length > 0){
+      no_data = false;
+    }
     this.setData({
-      ad_day:ad_day
+      ad_day:ad_day,
+      no_data:no_data
     });
   },
   setIcon(){//设置日历上的图标
     var that = this;
     var countInfos = that.data.countInfo;
+    var curr_time = that.data.curr_time;
+    var today_ad = { 'firstCount': 0, 'secondCount': 0, 'giveCount': 0 };
     for (var i in countInfos) {
-      that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
+        that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
+        if (curr_time == countInfos[i].date){
+          today_ad = countInfos[i];
+        }
     }
+    that.setData({
+      today_ad:today_ad
+    });
   },
   getThisMonthDays(year, month) {
     console.log(new Date(year, month, 0).getDate());
@@ -285,27 +310,27 @@ const conf = {
       if (getFirstDayOfWeek>=6){
         if (thisMonthDays>=30){
           this.setData({
-            calendarHeight: '740rpx'
+            calendarHeight: '747rpx'
           });
         }else{
           this.setData({
-            calendarHeight: '630rpx'
+            calendarHeight: '637rpx'
           });
         }
       }else{
         if (thisMonthDays >= 31){
           this.setData({
-            calendarHeight: '740rpx'
+            calendarHeight: '747rpx'
           });
         }else{
           this.setData({
-            calendarHeight: '630rpx'
+            calendarHeight: '637rpx'
           });
         }
       }
     }else{
       this.setData({
-        calendarHeight: '630rpx'
+        calendarHeight: '637rpx'
       });
     }
        this.setData({
@@ -410,7 +435,7 @@ const conf = {
     return {
       title: '广告日历',
       desc: '广告日历',
-      path: 'pages/index/index'+scene
+      path: 'pages/index/index' + scene
     };
   },
   onPress(event) {
@@ -491,9 +516,7 @@ const conf = {
         });
       }
     })
-
-  }
-  ,
+  } ,
   close() {
     this.setData({
       panelState: 'hidden'
@@ -514,8 +537,23 @@ const conf = {
   },
   // 点击日历上某一天
   tapDayItem(e) {
-    var that = this;
-   
+    var that = this;   
+    
+    console.log("is:"+e.target.dataset.id);
+    var today_ad = that.data.today_ad;
+    var curr_time = that.data.curr_time;
+    //设置今日为选中状态
+    that.addCharts(curr_time, today_ad.firstCount, today_ad.secondCount, today_ad.giveCount, '#6b62f1', '#ffffff', false);
+
+    if (e.target.dataset.id == ("canvas_" + curr_time)){
+      that.addCharts(curr_time, today_ad.firstCount, today_ad.secondCount, today_ad.giveCount, '#6b62f1', '#ffffff', true);
+      // that.addCharts(curr_time, 100, 0, 0, '#6b62f1', '#ffffff', true);
+    }else{
+      that.addCharts(curr_time, today_ad.firstCount, today_ad.secondCount, today_ad.giveCount, '#ffffff', '#000000', true);
+      // that.addCharts(curr_time, 100, 0, 0, '#ffffff', '#000000', true);
+    }
+    
+
     var selectDayValue = e.currentTarget.dataset.selectday;
     var selectTime = this.data.cur_year + '-' + this.data.cur_month + '-' + selectDayValue;
     var countInfos = this.data.countInfo;
@@ -538,12 +576,10 @@ const conf = {
     //
     var objectId = selectTime;
     var countInfos = this.data.countInfo;
-
     if(countInfos.length > 0){
       for (var i in countInfos) {
         if (countInfos[i].date == objectId) {
           this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
-
         }
         else {
           that.setData({
@@ -569,7 +605,7 @@ const conf = {
 
     // console.log(e.currentTarget.offsetLeft, e.currentTarget.offsetTop);
    //设置当日广告数据
-    that.getAdDay(selectTime);
+   that.getAdDay(selectTime);
    
   },
   //点击图表
@@ -600,9 +636,6 @@ const conf = {
             panelState: 'hidden'
           });
           that.deleteAd();
-
-
-
         } else if (res.cancel) {
           console.log('用户点击取消')
         }

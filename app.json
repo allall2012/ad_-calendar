@@ -1,10 +1,10 @@
 {
   "pages": [    
-        
-    "pages/OfficialAccounts/OfficialAccounts",
+        "pages/OfficialAccounts/OfficialAccounts",
+          "pages/ReportForms/ReportForms",
     "pages/index/index",
-    "pages/AddAD/AddAD",
-    "pages/ReportForms/ReportForms"    
+    "pages/AddAD/AddAD"
+  
   ],
   "window": {
     "backgroundTextStyle": "light",

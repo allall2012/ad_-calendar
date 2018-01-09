@@ -30,7 +30,8 @@
         <view class="grid white-color box box-align-center box-pack-center" wx:for="{{days}}" wx:key="{{index}}" data-idx="{{index}}">
           <view data-selectDay="{{item.day}}" class="day {{item.choosed ? 'border-radius pink-bg' : ''}} box box-align-center box-pack-center relative" bindtap="tapDayItem">
             <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==curr_time}}">
-              <view class="day-style {{todayState}}">{{item.day}}</view>
+              <view class="day-style ">{{item.day}}</view>
+              <canvas canvas-id="canvas_{{curr_time}}" data-id="canvas_{{curr_time}}" class="canvas" bindtap="canvastap"></canvas>
             </block>
             <block wx:else>
               <view class="day-style">{{item.day}}</view>
@@ -44,7 +45,6 @@
 
             <!-- 加上今日标识-->
             <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==curr_time}}">
-
               <view class="fs24 today">今日</view>
             </block>
 
@@ -95,7 +95,7 @@
         </view>
         <view class="pull-right">
           <image src='/image/icon_time.png' class='icon-clock pull-right'></image>
-          <view class="pull-right fs26 time-color">{{item.publish_at}}</view>
+          <view class="pull-right fs26 time-color">{{item.publish_at1}}</view>
         </view>
       </view>
       <view class="info-content">
@@ -107,10 +107,10 @@
 
   </view>
 
-  <view class="panel {{panelState}}" style="top:{{panelTop}}px;left:{{panelLeft}}px">
+  <view class="panel {{panelState}}" style="top:{{panelTop}}px;left:{{panelLeft}}px" wx:if="{{fansinfo.role == 'admin' || ad.fans_id == fansinfo.id}}">
     <view class="panel-header">
       <view class="box">
-        <view wx:if="{{fansinfo.role == 'admin' || ad.fans_id == fansinfo.id}}" class="flex text-center">
+        <view  class="flex text-center">
           <image src="/image/icon_delete.png" class="wh_92" bindtap="toDelete"></image>
         </view>
         <view class="flex text-center">
@@ -124,11 +124,12 @@
 
   </view>
 
+  <image src='/image/no-data.png' class="no-date" wx:if="{{no_data}}"></image>
 
   <view class="selectStyle {{showState}}" style="top:{{selectTop}}px;left:{{selectLeft}}px;z-index:99999">{{selectDay}}</view>
   <view style="height:200rpx;"></view>
   <navigator url='/pages/AddAD/AddAD?mp_id={{mp_id}}&date={{cur_year}}-{{cur_month}}-{{selectDay}}' style="display:inline;" open-type='navigateTo' hover-class="none">
-    <image src="/image/icon_add.png" class="wh_168" style="position:fixed;bottom:110rpx;left:{{addLeft}}px;"></image>
+    <image src="/image/icon_add.png" class="wh_168" style="position:fixed;bottom:100rpx;left:{{addLeft}}px;"></image>
   </navigator>
   <view class="add-area text-center">
   </view>
@@ -138,8 +139,10 @@
 <view class="footer">
   <view class="box">
     <view class="flex text-center">
-      <image src="/image/icon_gongzhonghao.png" class="wh44 mt16"></image>
-      <view class="fs20">公众号</view>
+      <navigator url='/pages/OfficialAccounts/OfficialAccounts' open-type="redirect" hover-class="none">
+        <image src="/image/icon_gongzhonghao.png" class="wh44 mt16"></image>
+        <view class="fs20">公众号</view>
+      </navigator>
     </view>
     <view class="flex text-center">
       <navigator url='/pages/ReportForms/ReportForms' open-type="redirect" hover-class="none">

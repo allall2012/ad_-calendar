@@ -50,19 +50,22 @@
 </view>
 
 <view class="table m24">
-  <view class="tr">
+  <view class="tr" style='font-weight:bold'>
     <view class="th" style='border-top-left-radius:10rpx;'>账号</view>
     <view class="th" style='border-top-right-radius:10rpx;'>总金额(元)</view>
   </view>
-  <scroll-view style="height:560rpx;background:#fff;" scroll-y="true">
-  <view class="tr" wx:for="{{report}}" wx:key="">
-    <view class="td td1">{{item.name}}</view>
-    <view class="td">{{item.ad_price}}</view>
-  </view>
+  <scroll-view style="height:{{height}}px;background:#fff;" scroll-y="true">
+    <view class="tr" wx:for="{{report}}" wx:key="">
+      <view class="td td1">{{item.name}}</view>
+      <view class="td">{{item.ad_price}}</view>
+    </view>
   </scroll-view>
-  <view class="tr">
-    <view class="th" style='border-bottom-left-radius:10rpx;'>总计金额</view>
-    <view class="th" style='border-bottom-right-radius:10rpx;'>{{total}}</view>
+
+  <view class="foot-tr" style='font-weight:bold'>
+    <view class="tr" style="margin-right:46rpx;">
+      <view class="th" style='border-bottom-left-radius:10rpx;'>总计金额</view>
+      <view class="th" style='border-bottom-right-radius:10rpx;'>{{total}}</view>
+    </view>
   </view>
 </view>
 
@@ -75,8 +78,10 @@
       </navigator>
     </view>
     <view class="flex text-center">
-      <image src="/image/icon_baobiao_l.png" class="wh44 mt16"></image>
-      <view class="fs20">报表</view>
+      <navigator url='/pages/ReportForms/ReportForms' open-type="redirect" hover-class="none">
+        <image src="/image/icon_baobiao_l.png" class="wh44 mt16"></image>
+        <view class="fs20">报表</view>
+      </navigator>
     </view>
   </view>
 </view>

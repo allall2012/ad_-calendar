@@ -55,6 +55,18 @@ Page({
       success:function(res){
         if(res.data.errcode == 0){
           var mps = res.data.data;
+            var temp = new Array()
+            mps.forEach(function(val){
+              // temp[val.id] = new Array();
+              // temp[val.id].push(val);
+              temp[val.id] = val;
+            });
+          try {
+            wx.setStorageSync('mps', temp);
+          } catch (e) {
+
+          }
+
           var num = 3;
           var mpsed = new Array(Math.ceil(mps.length / num));
           var i=-1;

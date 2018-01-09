@@ -7,7 +7,7 @@ Page({
    */
   data: {
     date: '2017-10-2',
-    array: ['主图', '次图', '赠送'],
+    array: ['头图', '次图', '赠送'],
     index:0,
     scrollTop:0,
     showModal:false,
@@ -23,6 +23,7 @@ Page({
     selectNotice:'',//已选择的通知人
     fansinfo:'',//自己的个人信息
     checkBox:[],//勾选的 通知人
+    is_submit:false,
   },
 
   /**
@@ -67,11 +68,11 @@ Page({
           wx.hideLoading();
         }, 1000);
         var date = options.date || '';
-        console.log(date);
         if (date == ''){
-          var date = new Date();
-          date = date.getFullYear() + "-" + (1 + date.getMonth()) + "-" + date.getDate();
+          date = new Date();
         }
+        // var date = new Date();
+        date = that.formatDate(date);
         that.setData({
           date: date,
           addPanelState: 'block',
@@ -83,6 +84,23 @@ Page({
      
       }
     }, 100);
+  },
+  formatDate:function(date){
+    var type = typeof(date);
+    console.log(type);
+    if(type == 'object'){
+      var year = date.getFullYear();
+      var month = date.getMonth() + 1;
+      var day = date.getDate();
+    }else{
+      var arr = date.split('-');
+      var year = arr[0];
+      var month = arr[1];
+      var day = arr[2];
+    }
+    month = month < 10 ? "0" + month : month;
+    day = day < 10 ? "0" + day : day;
+    return  year + '-' + month + '-' + day;
   },
   getNotice:function(){
     var that = this;
@@ -96,12 +114,11 @@ Page({
         if(res.data.errcode == 0){
           if(that.data.ad_id == ''){
             that.setData({
-              selectNotice:res.data.data
+              selectNotice:res.data.data.selectNotice
             });
           }
           var selectNotice = that.data.selectNotice;
-       
-          var notice = res.data.data;
+          var notice = res.data.data.notice;
           var temp = new Array();
           var checkBox = new Array()
           selectNotice.forEach(function(val){
@@ -121,6 +138,11 @@ Page({
             notice: temp2,
             checkBox:checkBox,
           });
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: res.data.errmsg,
+          })
         }
       }
     })
@@ -183,6 +205,16 @@ Page({
     }
   },
   submit:function(){
+    
+    var is_submit = this.data.is_submit;
+    if (is_submit){
+      //判断是否重复提交
+      wx.showModal({
+        title: '提示',
+        content: '不要重复提交',
+      })
+    }
+
     var that = this;
     var ad_id = this.data.ad_id;
     if(ad_id != ''){
@@ -208,13 +240,10 @@ Page({
       });
       return false;
     }
-    if (ad_price == '') {
-      wx.showModal({
-        title: '提示',
-        content: '请填写广告价格',
-      });
-      return false;
-    }
+    //防止重复提交
+    that.setData({
+      is_submit:true
+    });
     wx.request({
       url: that.data.domain + '/api/ad',
       method: 'POST',
@@ -295,6 +324,9 @@ Page({
          break;
      }
      
+     if (ad_place == 'present'){
+       ad.ad_price = 0; 
+     }
      ad.ad_place = ad_place;
      console.log(index,ad_place);
     this.setData({

@@ -12,8 +12,7 @@
         <view class="line box">
           <view class="fs32">发布日期</view>
           <view class="fs32 text-right">
-
-            <picker mode="date" value="{{date}}" style="width:220rpx;" start="2015-09-01" end="2030-09-01" bindchange="bindDateChange">
+            <picker mode="date" value="{{date}}" style="width:250rpx;" start="2015-09-01" end="2030-09-01" bindchange="bindDateChange">
               <view class="picker">
                 <view class="pull-right">
                   <image src='/image/icon_left_1.png' class="right-arrows pull-right"></image>
@@ -88,7 +87,7 @@
     <image src='/image/icon_close.png' class="close" bindtap="noticeBack"></image>
   </view>
   <view class="modal-content">
-    <scroll-view scroll-y="true" style="height:667rpx;">
+    <scroll-view scroll-y="true" style="height:800rpx;">
       <checkbox-group class="radio-group" bindchange="checkboxChange" style="height:870rpx;">
         <view wx:for="{{notice}}" wx:key="">
           <view class="select-list">
