@@ -1,8 +1,8 @@
 {
   "pages": [    
-        "pages/OfficialAccounts/OfficialAccounts",
-          "pages/ReportForms/ReportForms",
+    "pages/OfficialAccounts/OfficialAccounts",
     "pages/index/index",
+    "pages/ReportForms/ReportForms",
     "pages/AddAD/AddAD"
   
   ],

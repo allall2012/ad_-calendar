@@ -33,6 +33,7 @@ Page({
       }
     });
     app.getUserInfo(options);
+    app.checkAuth();
     var times = setInterval(function () {
       var userinfo = wx.getStorageSync('userinfo');
       var timestamp = Date.parse(new Date()) / 1000;
@@ -147,7 +148,7 @@ Page({
       weekSearch: false,
       monthSearch: false
     })
-    this.getRrport();
+    this.getReport();
   },
   setDate:function(str){
       switch(str){

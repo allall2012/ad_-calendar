@@ -366,6 +366,17 @@ page{
   width: 77rpx;
   font: normal normal 32rpx/80rpx "PingFangSC-Regular";
 }
+.targetDate {
+  background: #6b62f1;
+  border-radius: 50%;
+  color: #fff;
+  position: absolute;
+  text-align: center;
+  height: 77rpx;
+  width: 77rpx;
+  font: normal normal 32rpx/80rpx "PingFangSC-Regular";
+}
+
 
 .no-date{
   width:336rpx;

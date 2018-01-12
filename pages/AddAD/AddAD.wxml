@@ -25,7 +25,7 @@
         <view class="line box">
           <view class="fs32">广告主体名称</view>
           <view class="fs32 text-right">
-            <input value="{{ad.ad_name}}" bindinput='adName' />
+            <input value="{{ad.ad_name}}" bindinput='adName' placeholder='名称'/>
           </view>
         </view>
         <view class="line box">
@@ -40,12 +40,13 @@
           </view>
 
         </view>
-        <view class="line box">
+        <view class="line box ">
           <view class="fs32">广告价格</view>
           <view class="fs32 text-right">
-            <input value="{{ad.ad_price}}" type='digit' bindinput="adPrice" />
+            <input value="{{ad.ad_price}}" type='digit' bindinput="adPrice" placeholder='价格' />
           </view>
         </view>
+
         <view class="line box">
           <view class="fs32">是否预定</view>
           <view class="fs32 text-right">
@@ -57,6 +58,14 @@
             </radio-group>
           </view>
         </view>
+        <view class="line box remark">
+          <view class="fs32">备注</view>
+          <view class="fs32 text-right">
+            <textarea bindinput='remark' auto-height placeholder="备注" value="{{ad.remark}}"/> 
+             <!-- <input value="{{ad.remark}}" bindinput='remark' placeholder='备注'/>  -->
+          </view>
+        </view>
+
         <view class='box'>
           <view class="fs32 lh100">通知谁</view>
         </view>

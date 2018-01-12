@@ -7,6 +7,11 @@ let choose_year = null,
   choose_month = null;
 const conf = {
   data: {
+    cur_year:'',//年
+    cur_month:'',//月
+    weeks_ch:'',//周
+    curr_time:'',//当前日期
+    targetDate:'',//目标日期
     userinfo:'',//登录标识
     fansinfo:'',//粉丝信息 姓名 角色 等
     mp_id:'',//公众号id
@@ -33,48 +38,65 @@ const conf = {
     todayState:'today-skin',
     type: '',//如何访问 share 通过分享进入
     no_data:false,//当日有无广告
-    today_ad:'',//当日 广告图标占比
-    countInfo: [
-      {
-        date: '2018-1-20',
-        firstCount: 0,
-        secondCount: 40,
-        giveCount: 30
-      },
-    ]
+    dayIcon:'',//当日 广告图标占比
+    countInfo: [],
+    scene:'',
+    screenWidth:''
   },
   onLoad(options) {
-     var mp_id = options.mp_id || '';
+    var mp_id = options.mp_id || '';
+    // options.date = '2018-1-15';
+    var targetDate = options.date ||'';
     if(mp_id == ''){
       wx.redirectTo({
         url: '/pages/OfficialAccounts/OfficialAccounts',
-      })
+      });
+      return;
     }
-    var mps = wx.getStorageSync('mps');
-    var mp = mps[mp_id];
-    console.log(mp);
-    wx.setNavigationBarTitle({
-      title: mp.name
-    })
     var type = options.type || '';
     this.setData({
       mp_id: mp_id,
       type: type,
     });
     var that = this;
+    wx.getSystemInfo({
+      success: function (res) {
+          var screenWidth = res.windowWidth;
+          that.setData({
+            screenWidth: screenWidth
+          });
+        }
+      });
     const date = new Date();
     const cur_year = date.getFullYear();
     const cur_month = date.getMonth() + 1;
     const cur_day = date.getDate();
     const curr_time = date.getFullYear() + "-" + cur_month + "-" + cur_day;
     const weeks_ch = ['日', '一', '二', '三', '四', '五', '六'];
-    that.setData({
-      cur_year,
-      cur_month,
-      weeks_ch,
-      curr_time,
-      selectDay:cur_day,
-    });
+    if(targetDate != ''){
+      var arr = targetDate.split('-');
+      var year = parseInt(arr[0]);
+      var month = parseInt(arr[1]);
+      var day = parseInt(arr[2]);
+      that.setData({
+        cur_year: year,
+        cur_month: month,
+        weeks_ch: weeks_ch,
+        curr_time: curr_time,
+        targetDate:year+'-'+month+'-'+day,
+        selectDay: day,
+      });
+    }else{
+      that.setData({
+        cur_year:cur_year,
+        cur_month:cur_month,
+        weeks_ch: weeks_ch,
+        curr_time: curr_time,
+        targetDate: curr_time,
+        selectDay: cur_day,
+      });
+    }
+  
     wx.showLoading({
       'title': '加载中',
       'mask': true,
@@ -82,7 +104,7 @@ const conf = {
       }
     });
     app.getUserInfo(options);
-   
+    app.checkAuth();
     var times = setInterval(function () {
       var userinfo = wx.getStorageSync('userinfo');
       var timestamp = Date.parse(new Date()) / 1000;
@@ -108,7 +130,6 @@ const conf = {
             that.setData({
               addLeft: (res.windowWidth - 84) / 2
             });
-            console.log((res.windowWidth - 84) / 2);
           },
         })
 
@@ -214,20 +235,23 @@ const conf = {
           for(var item in temp){
             countInfo.push(temp[item]);
           }
-          var ad_day = adsDate[that.data.curr_time] || [];
+          var ad_day = adsDate[that.data.targetDate] || [];
            that.setData({
              ads: res.data.data,
              adsDate:adsDate,
-             countInfo:countInfo
+             countInfo:countInfo,
+             ad_day:ad_day
           });
-          that.getAdDay(that.data.curr_time);
+
+          that.getAdDay(that.data.targetDate);
 
           that.setIcon();
 
-          var today_ad = that.data.today_ad;
-          var curr_time = that.data.curr_time;
-          //设置今日为选中状态
-          that.addCharts(curr_time, today_ad.firstCount, today_ad.secondCount, today_ad.giveCount, '#6b62f1', '#ffffff', false);
+          var dayIcon = that.data.dayIcon;
+          var targetDate = that.data.targetDate;
+          console.log(targetDate);
+          //设置目标日期为选中状态
+          that.addCharts(targetDate, dayIcon.firstCount, dayIcon.secondCount, dayIcon.giveCount, '#6b62f1', '#ffffff', true);
 
         }else{
           wx.showModal({
@@ -253,16 +277,17 @@ const conf = {
   setIcon(){//设置日历上的图标
     var that = this;
     var countInfos = that.data.countInfo;
-    var curr_time = that.data.curr_time;
-    var today_ad = { 'firstCount': 0, 'secondCount': 0, 'giveCount': 0 };
+    var targetDate = that.data.targetDate;
+    var dayIcon = { 'firstCount': 0, 'secondCount': 0, 'giveCount': 0 };
     for (var i in countInfos) {
-        that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
-        if (curr_time == countInfos[i].date){
-          today_ad = countInfos[i];
+        if (targetDate == countInfos[i].date){
+          dayIcon = countInfos[i];
+        }else{
+          that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
         }
     }
     that.setData({
-      today_ad:today_ad
+      dayIcon: dayIcon
     });
   },
   getThisMonthDays(year, month) {
@@ -277,6 +302,7 @@ const conf = {
   calculateEmptyGrids(year, month) {
     var that = this;
     const firstDayOfWeek = this.getFirstDayOfWeek(year, month);
+    
     let empytGrids = [];
     if (firstDayOfWeek > 0) {
       for (let i = 0; i < firstDayOfWeek; i++) {
@@ -412,6 +438,7 @@ const conf = {
   },
   pickerChange(e) {
     const val = e.detail.value;
+    // console.log(val);
     choose_year = this.data.picker_year[val[0]];
     choose_month = this.data.picker_month[val[1]];
   },
@@ -429,12 +456,17 @@ const conf = {
 
     this.setData(o);
   },
-  onShareAppMessage() {
+  onShareAppMessage:function(res) {
     var mp_id = this.data.mp_id;
-    var scene = '?mp_id=' + mp_id + "&type=share";
+    var selectDay = this.data.selectDay;
+    var cur_year = this.data.cur_year;
+    var cur_month = this.data.cur_month;
+    var date = cur_year + '-' + cur_month + '-'+ selectDay;
+    var scene = '?mp_id=' + mp_id + "&type=share&date="+date;
+    var mpinfo = this.data.mpinfo;
+
     return {
-      title: '广告日历',
-      desc: '广告日历',
+      title: mpinfo.name,
       path: 'pages/index/index' + scene
     };
   },
@@ -461,6 +493,7 @@ const conf = {
     });
   },
   addCharts(date, firstCount, secondCount, giveCount, backgroundColor, foreColor,isTapChart) {
+    var that = this;
     var days = date.split('-');
     var day = days[days.length - 1];
     var windowWidth = 80;
@@ -471,23 +504,21 @@ const conf = {
       console.error('getSystemInfoSync failed!');
     }
    
-    var screenWidth = 0;
-    wx.getSystemInfo({
-      success: function (res) {
-        var screenWidth = res.windowWidth;
+    // var screenWidth = 0;
+
+        var screenWidth = that.data.screenWidth;
         var left = (screenWidth * 78 / 750) / 2;
         var top = (screenWidth * 78 / 750) / 2;
         var elWidth = screenWidth * 79 / 750;
         var elHeight = screenWidth * 79 / 750;
         if (isTapChart){
-          elWidth = screenWidth * 78/ 750;
-          elHeight = screenWidth * 78 / 750;
           left = (screenWidth * 78 / 750) / 2;
           top = (screenWidth * 78 / 750) / 2;
-          console.log("width is :" + elWidth)
-
+          elWidth = screenWidth * 79 / 750;
+          elHeight = screenWidth * 79 / 750;
+          console.log("width :" + elWidth)
         }
-       
+      
         pieChart = new wxCharts({
           canvasId: 'canvas_' + date,
           type: 'ring',
@@ -514,8 +545,7 @@ const conf = {
           textLeft: left,
           animation: false
         });
-      }
-    })
+
   } ,
   close() {
     this.setData({
@@ -523,7 +553,7 @@ const conf = {
     });
   },
   selectDay(e) {
-    console.log(e.currentTarget.dataset.id);
+    // console.log(e.currentTarget.dataset.id,111);
     this.setData({
       selectDate: e.currentTarget.dataset.id
     });
@@ -540,16 +570,16 @@ const conf = {
     var that = this;   
     
     console.log("is:"+e.target.dataset.id);
-    var today_ad = that.data.today_ad;
-    var curr_time = that.data.curr_time;
-    //设置今日为选中状态
-    that.addCharts(curr_time, today_ad.firstCount, today_ad.secondCount, today_ad.giveCount, '#6b62f1', '#ffffff', false);
+    var dayIcon = that.data.dayIcon;
+    var targetDate = that.data.targetDate;
+    // //设置今日为选中状态
+    // that.addCharts(targetDate, dayIcon.firstCount, dayIcon.secondCount, dayIcon.giveCount, '#6b62f1', '#ffffff', false);
 
-    if (e.target.dataset.id == ("canvas_" + curr_time)){
-      that.addCharts(curr_time, today_ad.firstCount, today_ad.secondCount, today_ad.giveCount, '#6b62f1', '#ffffff', true);
+    if (e.target.dataset.id == ("canvas_" + targetDate)){
+      that.addCharts(targetDate, dayIcon.firstCount, dayIcon.secondCount, dayIcon.giveCount, '#6b62f1', '#ffffff', false);
       // that.addCharts(curr_time, 100, 0, 0, '#6b62f1', '#ffffff', true);
     }else{
-      that.addCharts(curr_time, today_ad.firstCount, today_ad.secondCount, today_ad.giveCount, '#ffffff', '#000000', true);
+      that.addCharts(targetDate, dayIcon.firstCount, dayIcon.secondCount, dayIcon.giveCount, '#ffffff', '#000000', false);
       // that.addCharts(curr_time, 100, 0, 0, '#ffffff', '#000000', true);
     }
     
@@ -580,6 +610,12 @@ const conf = {
       for (var i in countInfos) {
         if (countInfos[i].date == objectId) {
           this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
+
+          that.setData({
+            selectDay: selectDayValue,
+            selectLeft: e.currentTarget.offsetLeft,
+            selectTop: e.currentTarget.offsetTop
+          });
         }
         else {
           that.setData({
@@ -600,26 +636,28 @@ const conf = {
         selectTop: e.currentTarget.offsetTop
       });
       // console.log(selectDayValue);
-      this.addCharts('2018-01-11', 0, 0, 0, '#ffffff', '#35307b', false);
+      // this.addCharts('2013-01-11', 0, 0, 0, '#ffffff', '#35307b', false);
     }
 
     // console.log(e.currentTarget.offsetLeft, e.currentTarget.offsetTop);
+    console.log(selectTime);
+
    //设置当日广告数据
    that.getAdDay(selectTime);
    
   },
   //点击图表
   canvastap(e) {
-    var objectId = e.currentTarget.dataset.id.replace('canvas_', '');
-    var countInfos = this.data.countInfo;
-    for (var i in countInfos) {
-      if (countInfos[i].date == objectId) {
-        this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff',true);
-      }
-      else {
-        this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b',false);
-      }
-    }
+    // var objectId = e.currentTarget.dataset.id.replace('canvas_', '');
+    // var countInfos = this.data.countInfo;
+    // for (var i in countInfos) {
+    //   if (countInfos[i].date == objectId) {
+    //     this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff',true);
+    //   }
+    //   else {
+    //     this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b',false);
+    //   }
+    // }
   },
   onPullDownRefresh: function () {
     console.log("下拉啦");
@@ -653,12 +691,21 @@ const conf = {
       },
       success:function(res){
         if(res.data.errcode == 0){
+          var mp_id = that.data.mp_id;
+          var selectDay = that.data.selectDay;
           var cur_year = that.data.cur_year;
           var cur_month = that.data.cur_month;
-          that.getAd(cur_year, cur_month);
-          that.setData({
-            showState:'hidden'
-          });
+          var date = cur_year + '-' + cur_month + '-' + selectDay;
+          var scene = '?mp_id=' + mp_id + "&date=" + date;
+          that.setData({scene:scene});
+       
+          wx.redirectTo({
+            url: '/pages/index/index'+that.data.scene,
+          })
+          // that.getAd(cur_year, cur_month);
+          // that.setData({
+          //   showState:'hidden'
+          // });
         }else{
           wx.showModal({
             title: '提示',

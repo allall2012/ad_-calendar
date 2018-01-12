@@ -152,4 +152,11 @@ input-holder {
 .radio-group >label{
   margin-right: 40rpx;
 }
-
+.remark{
+  min-height: 100rpx;
+  height: auto;
+}
+.remark textarea{
+  padding: 10rpx 0;
+  width: 500rpx;
+}

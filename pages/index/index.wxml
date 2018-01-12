@@ -29,9 +29,11 @@
         </view>
         <view class="grid white-color box box-align-center box-pack-center" wx:for="{{days}}" wx:key="{{index}}" data-idx="{{index}}">
           <view data-selectDay="{{item.day}}" class="day {{item.choosed ? 'border-radius pink-bg' : ''}} box box-align-center box-pack-center relative" bindtap="tapDayItem">
-            <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==curr_time}}">
+            <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==targetDate}}">
               <view class="day-style ">{{item.day}}</view>
-              <canvas canvas-id="canvas_{{curr_time}}" data-id="canvas_{{curr_time}}" class="canvas" bindtap="canvastap"></canvas>
+              <view class='targetDate' wx:if="{{cur_year+'-'+cur_month+'-'+selectDay==targetDate}}">{{item.day}}</view>
+              <!-- <canvas style='' canvas-id="canvas_{{targetDate}}" data-id="canvas_{{targetDate}}" class="canvas" bindtap="canvastap"></canvas> -->
+
             </block>
             <block wx:else>
               <view class="day-style">{{item.day}}</view>

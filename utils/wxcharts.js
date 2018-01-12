@@ -1762,8 +1762,9 @@ Animation.prototype.stop = function () {
 
 function drawCharts(type, opts, config, context) {
     var _this = this;
-
+   
     var series = opts.series;
+    
     var categories = opts.categories;
     series = fillSeriesColor(series, config);
 

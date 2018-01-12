@@ -24,6 +24,7 @@ Page({
     fansinfo:'',//自己的个人信息
     checkBox:[],//勾选的 通知人
     is_submit:false,
+    scene:''
   },
 
   /**
@@ -51,6 +52,7 @@ Page({
       }
     });
     app.getUserInfo(options);
+    app.checkAuth();
     var times = setInterval(function () {
       var userinfo = wx.getStorageSync('userinfo');
       var timestamp = Date.parse(new Date()) / 1000;
@@ -196,7 +198,8 @@ Page({
         'fans': that.data.fansinfo,
         'is_book': 0, 
         'mp_id': that.data.mp_id,
-        'ad_place':'master'
+        'ad_place':'master',
+        'remark':''
       }
       that.setData({
         ad: ad,
@@ -212,7 +215,8 @@ Page({
       wx.showModal({
         title: '提示',
         content: '不要重复提交',
-      })
+      });
+      return false;
     }
 
     var that = this;
@@ -230,7 +234,7 @@ Page({
     ad.notice_user = that.data.checkBox;
     ad.publish_at = that.data.date;
     ad.fans_id = ad.fans.id;
-    console.log(ad);
+
     var ad_name = ad.ad_name || '';
     var ad_price = ad.ad_price || '';
     if(ad_name == ''){
@@ -244,6 +248,10 @@ Page({
     that.setData({
       is_submit:true
     });
+    wx.showLoading({
+      title: '提交中',
+    });
+
     wx.request({
       url: that.data.domain + '/api/ad',
       method: 'POST',
@@ -259,8 +267,12 @@ Page({
             duration: 2000
           });
           setTimeout(function(){
-            wx.navigateTo({
-              url: '/pages/index/index?mp_id=' + that.data.mp_id,
+            var mp_id = that.data.mp_id;
+            var date = that.data.date;
+            var scene = '?mp_id=' + mp_id + "&date=" + date;
+            that.setData({scene:scene});
+            wx.redirectTo({
+              url: '/pages/index/index' + that.data.scene,
             })
           },1000);
 
@@ -281,6 +293,14 @@ Page({
     ad.ad_name = e.detail.value;
     this.setData({
       ad:ad,
+    })
+  },
+  remark:function(e){
+    console.log(e.detail.value);
+    var ad = this.data.ad;
+    ad.remark = e.detail.value;
+    this.setData({
+      ad: ad,
     })
   },
   adPrice: function (e) {
