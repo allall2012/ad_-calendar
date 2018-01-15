@@ -3,7 +3,7 @@ page{
   background:#f2f6ff;
 }
 .calendar {
-  height: 642rpx;
+  height: 684rpx;
 }
 
 .top-handle {
@@ -45,7 +45,7 @@ page{
 }
 
 .days {
-  height: 500rpx;
+  height: 550rpx;
 }
 
 .grid {
@@ -372,6 +372,8 @@ page{
   border-radius: 50%;
   color: #fff;
   position: absolute;
+  top:0rpx;
+  left:0rpx;
   text-align: center;
   height: 77rpx;
   width: 77rpx;

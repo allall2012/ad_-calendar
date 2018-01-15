@@ -1,5 +1,5 @@
-<view class="clearfix bg-white" >
-  <view class="flex box box-tb box-align-center" style="height:{{calendarHeight}};">
+<view class="clearfix bg-white">
+  <view class="flex box box-tb box-align-center" style="height:{{}};">
     <view class="calendar pink-color box box-tb">
       <view class="top-handle fs28 box box-lr box-align-center box-pack-center">
         <view class="prev box box-rl" bindtap="handleCalendar" data-handle="prev">
@@ -8,13 +8,13 @@
           </view>
         </view>
         <view bindtap="chooseYearAndMonth" class="date-area box box-lr box-align-center box-pack-center">{{cur_year || "--"}} 年 {{cur_month || "--"}} 月</view>
-        <view class="next box box-lr" bindtap="handleCalendar" data-handle="next" >
+        <view class="next box box-lr" bindtap="handleCalendar" data-handle="next">
           <view class="next-handle box box-lr box-align-center box-pack-center">
             <image src='/image/icon_right.png' class="icon-direction"></image>
           </view>
         </view>
       </view>
-      <view class="weeks box box-lr box-pack-center box-align-center" >
+      <view class="weeks box box-lr box-pack-center box-align-center">
         <block wx:for="{{weeks_ch}}" wx:key="{{index}}">
           <block wx:if="{{index==0||index==6}}">
             <view class="flex week fs28 weekend-color" data-idx="{{index}}">{{item}} </view>
@@ -87,8 +87,8 @@
       <view class="pull-right sign sign-1"></view>
     </view>
   </view>
-  <view class="list plr_25" id="list" wx:for="{{ad_day}}" wx:key="">
-    <view class="info mt_20" bindtap="onPress" data-ad_id="{{item.id}}">
+  <view class="list plr_25" wx:for="{{ad_day}}" wx:key="" wx:for-index="index">
+    <view class="info mt_20" bindtap="onPress" data-ad_id="{{item.id}}" data-index="{{index}}">
       <image src="/image/icon_{{item.flag}}.png" class="flag"></image>
       <view class="info-header clearfix">
         <view class="pull-left">
@@ -113,14 +113,15 @@
   <view class="panel {{panelState}}" style="top:{{panelTop}}px;left:{{panelLeft}}px" wx:if="{{fansinfo.role == 'admin' || ad.fans_id == fansinfo.id}}">
     <view class="panel-header">
       <view class="box">
-        <view  class="flex text-center">
+        <view class="flex text-center">
           <image src="/image/icon_delete.png" class="wh_92" bindtap="toDelete"></image>
         </view>
         <view class="flex text-center">
           <image src="/image/icon_bianji.png" class="wh_92" bindtap="toUpdate"></image>
         </view>
         <view class="flex text-center">
-          <image src="/image/icon_back.png" bindtap="close" class="wh_92"></image>
+          <!-- <image src="/image/icon_back.png" bindtap="close" class="wh_92"></image> -->
+          <image src="/image/icon_see.png" bindtap="toArticle" class="wh_92"></image>
         </view>
       </view>
     </view>

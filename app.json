@@ -3,8 +3,8 @@
     "pages/OfficialAccounts/OfficialAccounts",
     "pages/index/index",
     "pages/ReportForms/ReportForms",
-    "pages/AddAD/AddAD"
-  
+    "pages/AddAD/AddAD",
+    "pages/Article/Article"
   ],
   "window": {
     "backgroundTextStyle": "light",

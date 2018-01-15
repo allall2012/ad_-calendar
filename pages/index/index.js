@@ -27,6 +27,9 @@ const conf = {
     ad_day:'',//当日广告 
     ad:'',//当前广告
     ad_id:'',//当前广告id
+    articles:[],//所有图文消息
+    article_day:[],//当日图文消息
+    article_index:0,//图文下标
     rd_session:'',
     domain:'',
     selectDay: '11',
@@ -180,6 +183,7 @@ const conf = {
       }
     })
   },
+  //获取当月 图文数据
   getArticle(year, month){
     var that = this;
     if (month < 10) {
@@ -195,9 +199,31 @@ const conf = {
         type: that.data.type
       },
       success:function(res){
-
+        if(res.data.errcode == 0){
+          var data = res.data.data;
+          var articles = new Array();
+          data.forEach(function(val){
+              if(articles[val.publish_at] == undefined){
+                articles[val.publish_at] = new Array();
+              }
+              articles[val.publish_at].push(val);
+          });
+          that.setData({
+            articles: articles,
+          });
+          that.getArticleDay(that.data.targetDate);
+         
+        }
       },
       });
+  },
+  //获取当日 图文数据
+  getArticleDay(time){
+    var articles = this.data.articles;
+    var article_day = articles[time] || [];
+    this.setData({
+      article_day: article_day,
+    });
   },
   getAd(year,month){
     var that = this;
@@ -254,12 +280,11 @@ const conf = {
           for(var item in temp){
             countInfo.push(temp[item]);
           }
-          var ad_day = adsDate[that.data.targetDate] || [];
+          // var ad_day = adsDate[that.data.targetDate] || [];
            that.setData({
              ads: res.data.data,
              adsDate:adsDate,
              countInfo:countInfo,
-             ad_day:ad_day
           });
 
           that.getAdDay(that.data.targetDate);
@@ -516,7 +541,8 @@ const conf = {
   onPress(event) {
     // console.log(event, event.currentTarget.dataset['ad_id']);
     var ad_id = event.currentTarget.dataset['ad_id'];
-
+    var index = event.currentTarget.dataset['index'];
+   
     var ad_day = this.data.ad_day;
     var ad = '';
     ad_day.forEach(function(val){
@@ -533,6 +559,7 @@ const conf = {
       panelTop: event.currentTarget.offsetTop - 2,
       ad_id:ad_id,
       ad:ad,
+      article_index:index
     });
   },
   addCharts(date, firstCount, secondCount, giveCount, backgroundColor, foreColor,isTapChart) {
@@ -608,6 +635,35 @@ const conf = {
       url: '/pages/AddAD/AddAD?ad_id=' + ad_id+'&mp_id='+mp_id,
     })
   },
+  toArticle(e){
+    var article_index = this.data.article_index;
+    var article_day = this.data.article_day;
+    
+    // console.log(article_day);
+    var ad_id = this.data.ad.id;
+    var mp_id = this.data.mp_id;
+    var article = article_day[article_index] || '';
+   
+    if (article == ''){
+      wx.showModal({
+        title: '提示',
+        content: "当日无图文消息",
+      });
+      return;
+    }
+    var article_id = article.id|| '';
+    if (article_id == '') {
+      wx.showModal({
+        title: '提示',
+        content: "当日无图文消息",
+      });
+      return;
+    }
+    
+    wx.navigateTo({
+      url: '/pages/Article/Article?ad_id=' + ad_id + '&mp_id=' + mp_id + '&article_id=' + article_id,
+    })
+  },
   // 点击日历上某一天
   tapDayItem(e) {
     var that = this;   
@@ -644,6 +700,8 @@ const conf = {
     });
    //设置当日广告数据
    that.getAdDay(selectTime);
+   //设置当日图文
+   that.getArticleDay(selectTime);
    
   },
   //点击图表
