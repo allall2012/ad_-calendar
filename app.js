@@ -149,7 +149,23 @@ App({
       });
 
     }
-  }
-
+  },
+  getFansInfo: function (rd_session) {
+    var that = this;
+    wx.request({
+      url: that.globalData.domain + '/api/fans',
+      data: {
+        rd_session:rd_session
+      },
+      success: function (res) {
+        if (res.data.errcode == 0) {
+          try {
+            wx.setStorageSync('fansinfo', res.data.data.data)
+          } catch (e) {
+          }
+        }
+      }
+    })
+  },
 
 })

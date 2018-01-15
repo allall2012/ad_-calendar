@@ -1,12 +1,12 @@
-<view class="m24 mps">
+<view class="mps">
   <view wx:for="{{mpsed}}" wx:for-item="mps" wx:key="">
     <view class="box bg-main mt16 offcialAccount">
-      <navigator wx:for="{{mps}}" wx:key="" url='/pages/index/index?mp_id={{item.id}}'>
-        <view class="item">
-          <image src="{{item.logo}}" class="icon"></image>
-          <view class="title fs24">{{item.name}}</view>
-        </view>
-      </navigator>
+        <navigator wx:for="{{mps}}" wx:key="" url='/pages/index/index?mp_id={{item.id}}' class='mr-20'>
+          <view class="item">
+            <image src="{{item.logo}}" class="icon"></image>
+            <view class="title fs24">{{item.name}}</view>
+          </view>
+        </navigator>
     </view>
   </view>
   <view class='h130'>

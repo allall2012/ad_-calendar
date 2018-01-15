@@ -25,7 +25,7 @@
         <view class="line box">
           <view class="fs32">广告主体名称</view>
           <view class="fs32 text-right">
-            <input value="{{ad.ad_name}}" bindinput='adName' placeholder='名称'/>
+            <input value="{{ad.ad_name}}" bindinput='adName' placeholder='名称' />
           </view>
         </view>
         <view class="line box">
@@ -52,17 +52,30 @@
           <view class="fs32 text-right">
             <radio-group class="radio-group" bindchange="isBookChange">
               <label class="radio">
-                <radio value="0" checked="{{ad.is_book == 0 ? 'checked' : ''}}" color="#857cff" />否</label>
-              <label class="radio">
                 <radio value="1" checked="{{ad.is_book == 1 ? 'checked' : ''}}" color="#857cff" />是</label>
+              <label class="radio">
+                <radio value="0" checked="{{ad.is_book == 0 ? 'checked' : ''}}" color="#857cff" />否</label>
             </radio-group>
           </view>
         </view>
-        <view class="line box remark">
+
+        <view class="line box">
+          <view class="fs32">是否开具发票</view>
+          <view class="fs32 text-right">
+            <radio-group class="radio-group" bindchange="isBillChange">
+              <label class="radio">
+                <radio value="1" checked="{{ad.is_bill == 1 ? 'checked' : ''}}" color="#857cff" />是</label>
+              <label class="radio">
+                <radio value="0" checked="{{ad.is_bill == 0 ? 'checked' : ''}}" color="#857cff" />否</label>
+            </radio-group>
+          </view>
+        </view>
+
+        <view class="line box">
           <view class="fs32">备注</view>
           <view class="fs32 text-right">
-            <textarea bindinput='remark' auto-height placeholder="备注" value="{{ad.remark}}"/> 
-             <!-- <input value="{{ad.remark}}" bindinput='remark' placeholder='备注'/>  -->
+            <!-- <textarea bindinput='remark' auto-height placeholder="备注" value="{{ad.remark}}" /> -->
+            <input value="{{ad.remark}}" bindinput='remark' placeholder='备注' />
           </view>
         </view>
 
@@ -70,14 +83,14 @@
           <view class="fs32 lh100">通知谁</view>
         </view>
         <view class="box">
-          <view class="list" bindtap="showDialogBtn">
-            <image src='/image/icon_tianjia.png' class='icon'></image>
-            <view class="fs24">添加</view>
-          </view>
-          <view>
+          <view style='width:100%'>
             <view class="list" wx:for="{{selectNotice}}" wx:key="">
               <image src="{{item.avatar_url}}" class='icon'></image>
               <view class="fs24">{{item.name}}</view>
+            </view>
+            <view class="list" bindtap="showDialogBtn">
+              <image src='/image/icon_tianjia.png' class='icon'></image>
+              <view class="fs24">添加</view>
             </view>
           </view>
         </view>

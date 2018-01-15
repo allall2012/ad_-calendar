@@ -335,7 +335,8 @@ page{
 }
 
 .panel-header {
-  padding: 71rpx 0rpx;
+  /* padding: 71rpx 0rpx;  */
+  padding: 100rpx 0rpx; 
   background-color: rgba(255, 255, 255, 0.88);
 }
 
@@ -364,7 +365,7 @@ page{
   text-align: center;
   height: 77rpx;
   width: 77rpx;
-  font: normal normal 32rpx/80rpx "PingFangSC-Regular";
+  font: normal normal 32rpx/77rpx "PingFangSC-Regular";
 }
 .targetDate {
   background: #6b62f1;
@@ -374,13 +375,17 @@ page{
   text-align: center;
   height: 77rpx;
   width: 77rpx;
-  font: normal normal 32rpx/80rpx "PingFangSC-Regular";
+  font: normal normal 32rpx/77rpx "PingFangSC-Regular";
 }
-
-
 .no-date{
   width:336rpx;
   height:200rpx;
   margin:60rpx auto;
   display: block;
+}
+.remark{
+  width: 100%;
+  overflow: hidden;
+  text-overflow:ellipsis;
+  white-space: nowrap;
 }

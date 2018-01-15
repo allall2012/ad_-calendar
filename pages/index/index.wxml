@@ -1,4 +1,4 @@
-<view class="clearfix bg-white">
+<view class="clearfix bg-white" >
   <view class="flex box box-tb box-align-center" style="height:{{calendarHeight}};">
     <view class="calendar pink-color box box-tb">
       <view class="top-handle fs28 box box-lr box-align-center box-pack-center">
@@ -8,13 +8,13 @@
           </view>
         </view>
         <view bindtap="chooseYearAndMonth" class="date-area box box-lr box-align-center box-pack-center">{{cur_year || "--"}} 年 {{cur_month || "--"}} 月</view>
-        <view class="next box box-lr" bindtap="handleCalendar" data-handle="next">
+        <view class="next box box-lr" bindtap="handleCalendar" data-handle="next" >
           <view class="next-handle box box-lr box-align-center box-pack-center">
             <image src='/image/icon_right.png' class="icon-direction"></image>
           </view>
         </view>
       </view>
-      <view class="weeks box box-lr box-pack-center box-align-center">
+      <view class="weeks box box-lr box-pack-center box-align-center" >
         <block wx:for="{{weeks_ch}}" wx:key="{{index}}">
           <block wx:if="{{index==0||index==6}}">
             <view class="flex week fs28 weekend-color" data-idx="{{index}}">{{item}} </view>
@@ -31,7 +31,7 @@
           <view data-selectDay="{{item.day}}" class="day {{item.choosed ? 'border-radius pink-bg' : ''}} box box-align-center box-pack-center relative" bindtap="tapDayItem">
             <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==targetDate}}">
               <view class="day-style ">{{item.day}}</view>
-              <view class='targetDate' wx:if="{{cur_year+'-'+cur_month+'-'+selectDay==targetDate}}">{{item.day}}</view>
+              <view class='targetDate' wx:if="{{cur_year+'-'+cur_month+'-'+selectDay==targetDate && no_data}}">{{item.day}}</view>
               <!-- <canvas style='' canvas-id="canvas_{{targetDate}}" data-id="canvas_{{targetDate}}" class="canvas" bindtap="canvastap"></canvas> -->
 
             </block>
@@ -71,6 +71,7 @@
     </picker-view>
   </view>
 </view>
+
 <view class="bg-color mt_20">
   <view class="sign-explain plr_25">
     <view class="pull-right">
@@ -86,7 +87,6 @@
       <view class="pull-right sign sign-1"></view>
     </view>
   </view>
-
   <view class="list plr_25" id="list" wx:for="{{ad_day}}" wx:key="">
     <view class="info mt_20" bindtap="onPress" data-ad_id="{{item.id}}">
       <image src="/image/icon_{{item.flag}}.png" class="flag"></image>
@@ -103,6 +103,7 @@
       <view class="info-content">
         <view>登记人：{{item.fans.name}}</view>
         <view>价格：{{item.ad_price}}元</view>
+        <view class='remark'>备注：{{item.remark}}</view>
       </view>
 
     </view>
@@ -130,7 +131,7 @@
 
   <view class="selectStyle {{showState}}" style="top:{{selectTop}}px;left:{{selectLeft}}px;z-index:99999">{{selectDay}}</view>
   <view style="height:200rpx;"></view>
-  <navigator url='/pages/AddAD/AddAD?mp_id={{mp_id}}&date={{cur_year}}-{{cur_month}}-{{selectDay}}' style="display:inline;" open-type='navigateTo' hover-class="none">
+  <navigator url='/pages/AddAD/AddAD?mp_id={{mp_id}}&date={{cur_year}}-{{cur_month}}-{{selectDay}}' style="display:inline;" open-type='navigateTo' hover-class="none" wx:if="{{fansinfo.role != 'visitor'}}">
     <image src="/image/icon_add.png" class="wh_168" style="position:fixed;bottom:100rpx;left:{{addLeft}}px;"></image>
   </navigator>
   <view class="add-area text-center">

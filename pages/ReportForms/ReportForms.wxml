@@ -55,7 +55,7 @@
     <view class="th" style='border-top-right-radius:10rpx;'>总金额(元)</view>
   </view>
   <scroll-view style="height:{{height}}px;background:#fff;" scroll-y="true">
-    <view class="tr" wx:for="{{report}}" wx:key="">
+    <view class="tr {{index % 2 == 0 ? 'bg-color' : ''}}" wx:for="{{report}}" wx:key="" wx:for-index="index">
       <view class="td td1">{{item.name}}</view>
       <view class="td">{{item.ad_price}}</view>
     </view>

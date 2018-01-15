@@ -2,6 +2,8 @@ page {
   background: #f2f6ff;
 }
 .mps{
+  margin: 24rpx;
+  margin-top: 6rpx;
   height: 100%;
   margin-bottom: 200rpx;
   padding-bottom: 200rpx;
@@ -24,7 +26,10 @@ page {
   -webkit-box-shadow:2px 2px 5px #eef0fd; 
   box-shadow:2px 2px 5px #eef0fd;
   padding-top:40px;
-  margin-right: 20rpx; 
+  /* margin-right: 20rpx;   */
+}
+.mr-20{
+  margin-right: 20rpx;
 }
 .icon{
   border-radius: 50%;

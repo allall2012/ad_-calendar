@@ -18,7 +18,8 @@ Page({
     userinfo:'',
     report:'',
     total:'',
-    height:0
+    height:0,
+    fansinfo:''
   },
 
   /**
@@ -39,7 +40,7 @@ Page({
       var timestamp = Date.parse(new Date()) / 1000;
       if (userinfo.rd_session && timestamp < userinfo.expires_in) {
         clearTimeout(times);
-        var fansinfo = wx.getStorageSync('fansinfo');
+        that.getFansInfo();
         that.setData({
           domain: app.globalData.domain,
           rd_session: userinfo.rd_session,
@@ -119,8 +120,18 @@ Page({
   onShareAppMessage: function () {
   
   },
+  getFansInfo() {
+    var that = this;
+    try {
+      var fansinfo = wx.getStorageSync('fansinfo');
+      that.setData({
+        fansinfo: fansinfo
+      });
 
-  
+    } catch (e) {
+
+    }
+  },
   bindStartDateChange: function (e) {  
     this.setData({
       startDate: e.detail.value

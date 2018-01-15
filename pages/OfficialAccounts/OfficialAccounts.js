@@ -25,13 +25,18 @@ Page({
       success: function () {
       }
     });
+    //登录 获取用户openid
     app.getUserInfo(options);
+
     app.checkAuth()
     var times = setInterval(function () {
       var userinfo = wx.getStorageSync('userinfo');
       var timestamp = Date.parse(new Date()) / 1000;
       if (userinfo.rd_session && timestamp < userinfo.expires_in) {
         clearTimeout(times);
+        //获取用户详细信息
+        app.getFansInfo(userinfo.rd_session);
+
         that.setData({
           domain: app.globalData.domain,
           rd_session: userinfo.rd_session,

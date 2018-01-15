@@ -21,6 +21,7 @@ Page({
     mp_id:'',
     notice:'',//所有可以被通知的人
     selectNotice:'',//已选择的通知人
+    needNotice:[],// 必须通知的人
     fansinfo:'',//自己的个人信息
     checkBox:[],//勾选的 通知人
     is_submit:false,
@@ -119,26 +120,34 @@ Page({
               selectNotice:res.data.data.selectNotice
             });
           }
-          var selectNotice = that.data.selectNotice;
-          var notice = res.data.data.notice;
-          var temp = new Array();
-          var checkBox = new Array()
-          selectNotice.forEach(function(val){
-            temp[val.id] = val;
-            checkBox.push(val.id);
+          that.setData({
+            needNotice: res.data.data.selectNotice
           });
+          var selectNotice = that.data.selectNotice;
+          var notice = res.data.data.optional;
+          var temp1 = new Array();
           var temp2 = new Array();
-          notice.forEach(function(val){
-              if(temp[val.id] != undefined){
-                val.checked = 'checked';
-              }
-              // temp2[val.id] = val;
-              temp2.push(val);
+          var temp3 = new Array();
+          selectNotice.forEach(function(val){
+            temp1['flat'+val.id] = val;
+            temp1.length++;
+          });
+          notice.forEach(function (val) {
+            temp2['flat'+val.id] = val;
+            temp2.length++;
           });
          
+          for(var key in temp2){
+            var val = temp2[key];
+            val.checked = '';
+            if (temp1[key] != undefined) {
+              val.checked = 'checked';
+            }
+            temp3.push(val);
+          }
+          console.log(temp3);
           that.setData({
-            notice: temp2,
-            checkBox:checkBox,
+            notice: temp3,
           });
         }else{
           wx.showModal({
@@ -197,6 +206,7 @@ Page({
       var ad = { 
         'fans': that.data.fansinfo,
         'is_book': 0, 
+        'is_bill':1,
         'mp_id': that.data.mp_id,
         'ad_place':'master',
         'remark':''
@@ -277,6 +287,11 @@ Page({
           },1000);
 
         }else{
+          //防止重复提交
+          that.setData({
+            is_submit: false
+          });
+          wx.hideLoading();
           wx.showModal({
             title: '提示',
             content: res.data.errmsg,
@@ -314,6 +329,14 @@ Page({
   isBookChange: function (e) {
     var ad = this.data.ad;
     ad.is_book = e.detail.value;
+    this.setData({
+      ad: ad,
+    })
+  },
+  isBillChange: function (e) {
+    var ad = this.data.ad;
+    ad.is_bill = e.detail.value;
+    console.log(e.detail.value);
     this.setData({
       ad: ad,
     })
@@ -389,6 +412,9 @@ Page({
       temp.forEach(function(val){
           temp2.push(val);
       });
+      var needNotice = this.data.needNotice;
+      console.log(needNotice);
+      selectNotice = this.data.needNotice.concat(selectNotice);
     this.setData({
         selectNotice:selectNotice,
         notice:temp2,

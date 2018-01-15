@@ -87,7 +87,10 @@ page {
   background: #d3d7f4;
   text-align: center;
 }
-
+.bg-color{
+   /* background-color: #f2f6ff;  */
+  /* background-color: #ff0000; */
+}
 .td {
   height: 110rpx;
   line-height: 110rpx;

@@ -5,6 +5,13 @@ var pieChart = null;
 const app=getApp();
 let choose_year = null,
   choose_month = null;
+
+var touchDot = 0;//触摸时的原点
+var time = 0;//  时间记录，用于滑动时且时间小于1s则执行左右滑动
+var interval = "";// 记录/清理 时间记录
+var touchMove = 0;
+var lock=false;
+
 const conf = {
   data: {
     cur_year:'',//年
@@ -125,6 +132,7 @@ const conf = {
         that.getFansInfo();
         that.getMp();
         that.getAd(cur_year,cur_month);
+        that.getArticle(cur_year, cur_month);
         wx.getSystemInfo({
           success: function (res) {
             that.setData({
@@ -138,23 +146,15 @@ const conf = {
   },
   getFansInfo(){
     var that = this;
-    wx.request({
-      url: that.data.domain + '/api/fans',
-      data:{
-        rd_session:that.data.rd_session
-      },
-      success:function(res){
-        if(res.data.errcode == 0){
-          that.setData({
-            fansinfo:res.data.data.data
-          });
-          try {
-            wx.setStorageSync('fansinfo', res.data.data.data)
-          } catch (e) {
-          }
-        }
-      }
-    })
+    try{
+      var fansinfo = wx.getStorageSync('fansinfo');
+      that.setData({
+        fansinfo: fansinfo
+      });
+
+    }catch(e){
+
+    }
   },
   getMp(){
     var that = this;
@@ -179,6 +179,25 @@ const conf = {
         }
       }
     })
+  },
+  getArticle(year, month){
+    var that = this;
+    if (month < 10) {
+      month = '0' + month;
+    }
+    wx.request({
+      url: that.data.domain + '/api/article',
+      data: {
+        rd_session: that.data.rd_session,
+        mp_id: that.data.mp_id,
+        year: year,
+        month: month,
+        type: that.data.type
+      },
+      success:function(res){
+
+      },
+      });
   },
   getAd(year,month){
     var that = this;
@@ -249,9 +268,8 @@ const conf = {
 
           var dayIcon = that.data.dayIcon;
           var targetDate = that.data.targetDate;
-          console.log(targetDate);
-          //设置目标日期为选中状态
-          that.addCharts(targetDate, dayIcon.firstCount, dayIcon.secondCount, dayIcon.giveCount, '#6b62f1', '#ffffff', true);
+        
+
 
         }else{
           wx.showModal({
@@ -278,17 +296,14 @@ const conf = {
     var that = this;
     var countInfos = that.data.countInfo;
     var targetDate = that.data.targetDate;
-    var dayIcon = { 'firstCount': 0, 'secondCount': 0, 'giveCount': 0 };
     for (var i in countInfos) {
+      //为目标日期加上选中状态 
         if (targetDate == countInfos[i].date){
-          dayIcon = countInfos[i];
+          that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
         }else{
           that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
         }
     }
-    that.setData({
-      dayIcon: dayIcon
-    });
   },
   getThisMonthDays(year, month) {
     console.log(new Date(year, month, 0).getDate());
@@ -320,6 +335,37 @@ const conf = {
     }
    
 
+  },
+  // 触摸开始事件
+  touchStart: function (e) {
+    touchDot = e.touches[0].pageX; // 获取触摸时的原点
+    // 使用js计时器记录时间    
+    // interval = setInterval(function () {
+    //   time++;
+    // }, 100);
+  },
+  // 触摸移动事件
+  touchMove: function (e) {
+    touchMove = e.touches[0].pageX;
+    console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));
+    // 向左滑动   
+    if (touchMove - touchDot <= -40 && time < 10 && !lock) {
+      this.handleCalendar2('next');
+      lock = true;
+    }
+    // 向右滑动
+    if (touchMove - touchDot >= 40 && time < 10 && !lock) {
+      this.handleCalendar2('prev');
+      lock = true;
+    }
+    // touchDot = touchMove; //每移动一次把上一次的点作为原点（好像没啥用）
+  },
+  // 触摸结束事件
+  touchEnd: function (e) {
+   // clearInterval(interval); // 清除setInterval
+    lock = false;
+
+    time = 0;
   },
   calculateDays(year, month) {
     let days = [];
@@ -363,14 +409,18 @@ const conf = {
       days
     });
   },
+
   handleCalendar(e) {
     this.setData({
-      'showState': 'hidden'
+      'showState': 'hidden',
+      'panelState':'hidden'
     });
     const handle = e.currentTarget.dataset.handle;
+    this.handleCalendar2(handle);
+  },
+  handleCalendar2(handle){
     const cur_year = this.data.cur_year;
     const cur_month = this.data.cur_month;
-
     var cur_year_month;
     if (handle === 'prev') {
       let newMonth = cur_month - 1;
@@ -415,15 +465,8 @@ const conf = {
 
     }
     var that = this;
-    that.getAd(that.data.cur_year,that.data.cur_month);
-    // console.log(cur_year + "-" + (1+cur_month));    
-    var countInfos = that.data.countInfo;
-    for (var i in countInfos) {
-      if (countInfos[i].date.indexOf(cur_year_month) > -1) {
-        that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b',false);
-      }
-    }
-
+    that.getAd(that.data.cur_year, that.data.cur_month);
+    that.getArticle(that.data.cur_year, that.data.cur_month);
   },
   tapDayItem(e) {
     console.log(e);
@@ -514,8 +557,8 @@ const conf = {
         if (isTapChart){
           left = (screenWidth * 78 / 750) / 2;
           top = (screenWidth * 78 / 750) / 2;
-          elWidth = screenWidth * 79 / 750;
-          elHeight = screenWidth * 79 / 750;
+          elWidth = screenWidth * 80 / 750;
+          elHeight = screenWidth * 80 / 750;
           console.log("width :" + elWidth)
         }
       
@@ -568,21 +611,6 @@ const conf = {
   // 点击日历上某一天
   tapDayItem(e) {
     var that = this;   
-    
-    console.log("is:"+e.target.dataset.id);
-    var dayIcon = that.data.dayIcon;
-    var targetDate = that.data.targetDate;
-    // //设置今日为选中状态
-    // that.addCharts(targetDate, dayIcon.firstCount, dayIcon.secondCount, dayIcon.giveCount, '#6b62f1', '#ffffff', false);
-
-    if (e.target.dataset.id == ("canvas_" + targetDate)){
-      that.addCharts(targetDate, dayIcon.firstCount, dayIcon.secondCount, dayIcon.giveCount, '#6b62f1', '#ffffff', false);
-      // that.addCharts(curr_time, 100, 0, 0, '#6b62f1', '#ffffff', true);
-    }else{
-      that.addCharts(targetDate, dayIcon.firstCount, dayIcon.secondCount, dayIcon.giveCount, '#ffffff', '#000000', false);
-      // that.addCharts(curr_time, 100, 0, 0, '#ffffff', '#000000', true);
-    }
-    
 
     var selectDayValue = e.currentTarget.dataset.selectday;
     var selectTime = this.data.cur_year + '-' + this.data.cur_month + '-' + selectDayValue;
@@ -592,56 +620,28 @@ const conf = {
       panelState:'hidden',
       todayState:''
     })
-    for (var i in countInfos) {
-      if (countInfos[i].date == selectTime) {
-        that.setData({
-          showState: 'hidden'
-        });
-        break;
-      } else {
-        
-      }
-    }
 
-    //
     var objectId = selectTime;
     var countInfos = this.data.countInfo;
-    if(countInfos.length > 0){
-      for (var i in countInfos) {
-        if (countInfos[i].date == objectId) {
-          this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
-
-          that.setData({
-            selectDay: selectDayValue,
-            selectLeft: e.currentTarget.offsetLeft,
-            selectTop: e.currentTarget.offsetTop
-          });
-        }
-        else {
-          that.setData({
-            showState: 'block',
-            selectDay: selectDayValue,
-            selectLeft: e.currentTarget.offsetLeft,
-            selectTop: e.currentTarget.offsetTop
-          });
-          this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
-        }
+    var showState = 'block';
+    for (var i in countInfos) {
+      if (countInfos[i].date == objectId) {
+        this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
+        showState = 'hidden';
       }
-    }else{
-
-      that.setData({
-        showState: 'block',
-        selectDay: selectDayValue,
-        selectLeft: e.currentTarget.offsetLeft,
-        selectTop: e.currentTarget.offsetTop
-      });
-      // console.log(selectDayValue);
-      // this.addCharts('2013-01-11', 0, 0, 0, '#ffffff', '#35307b', false);
+      else {
+        this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
+      }
     }
-
-    // console.log(e.currentTarget.offsetLeft, e.currentTarget.offsetTop);
-    console.log(selectTime);
-
+    if(objectId == that.data.targetDate){
+      showState = 'hidden';
+    }
+    that.setData({
+      showState: showState,
+      selectDay: selectDayValue,
+      selectLeft: e.currentTarget.offsetLeft,
+      selectTop: e.currentTarget.offsetTop
+    });
    //设置当日广告数据
    that.getAdDay(selectTime);
    
