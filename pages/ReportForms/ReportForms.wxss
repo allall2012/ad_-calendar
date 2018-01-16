@@ -17,6 +17,7 @@ page {
 }
 
 .date-select view {
+  display: block;
   width: 120rpx;
   height: 64rpx;
   text-align: center;

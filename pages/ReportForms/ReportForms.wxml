@@ -1,5 +1,6 @@
 <view class="header">
-  <view class="box bg-main m24 date-select">
+
+  <view class="box bg-main m24 date-select " style='justify-content:space-between;'>
     <block wx:if="{{todaySearch}}">
       <view class="active fs24" bindtap="searchType" data-id="todaySearch">今日</view>
     </block>
@@ -25,6 +26,7 @@
       <view class="fs24" bindtap="searchType" data-id="monthSearch">本月</view>
     </block>
   </view>
+
   <view class="data-search">
     <view class="title">自定义</view>
     <view class="box mt_10">

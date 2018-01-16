@@ -241,7 +241,14 @@ Page({
       }
     }
     var ad = that.data.ad;
-    ad.notice_user = that.data.checkBox;
+    var notice_user = new Array();
+    var selectNotice = that.data.selectNotice;
+    selectNotice.forEach(function(val){
+      notice_user.push(val.id);
+    });
+    ad.notice_user = that.data.notice_user;
+    // console.log(notice_user);
+    // return ;
     ad.publish_at = that.data.date;
     ad.fans_id = ad.fans.id;
 

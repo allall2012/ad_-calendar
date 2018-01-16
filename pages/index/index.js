@@ -48,6 +48,7 @@ const conf = {
     todayState:'today-skin',
     type: '',//如何访问 share 通过分享进入
     no_data:false,//当日有无广告
+    no_article:false,//有无图文
     dayIcon:'',//当日 广告图标占比
     countInfo: [],
     scene:'',
@@ -550,16 +551,21 @@ const conf = {
           ad = val;
       }
     });
-    try {
-      wx.setStorageSync('ad', ad);
-      } catch (e) {
+ 
+    var article_day = this.data.article_day;
+    var article = article_day[index] || '';
+    var article_id = article.id || '';
+    var no_article = false;
+    if (article_id == ''){
+      no_article = true;
     }
     this.setData({
       panelState: 'block',
       panelTop: event.currentTarget.offsetTop - 2,
       ad_id:ad_id,
       ad:ad,
-      article_index:index
+      article_index:index,
+      no_article: no_article
     });
   },
   addCharts(date, firstCount, secondCount, giveCount, backgroundColor, foreColor,isTapChart) {
@@ -636,33 +642,26 @@ const conf = {
     })
   },
   toArticle(e){
+    var that = this;
     var article_index = this.data.article_index;
     var article_day = this.data.article_day;
-    
-    // console.log(article_day);
-    var ad_id = this.data.ad.id;
-    var mp_id = this.data.mp_id;
     var article = article_day[article_index] || '';
-   
-    if (article == ''){
-      wx.showModal({
-        title: '提示',
-        content: "当日无图文消息",
-      });
-      return;
-    }
     var article_id = article.id|| '';
-    if (article_id == '') {
-      wx.showModal({
-        title: '提示',
-        content: "当日无图文消息",
-      });
-      return;
-    }
-    
-    wx.navigateTo({
-      url: '/pages/Article/Article?ad_id=' + ad_id + '&mp_id=' + mp_id + '&article_id=' + article_id,
-    })
+
+    wx.request({
+      url: that.data.domain + '/api/contact/',
+      data: {
+        rd_session: that.data.rd_session,
+        type: 'article',
+        article_id: article_id
+      },
+      success: function (res) {
+        if (res.data.errcode == 0) {
+
+          }
+        }
+    });
+
   },
   // 点击日历上某一天
   tapDayItem(e) {

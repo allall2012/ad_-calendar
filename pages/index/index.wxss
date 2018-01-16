@@ -335,9 +335,10 @@ page{
 }
 
 .panel-header {
-  /* padding: 71rpx 0rpx;  */
-  padding: 100rpx 0rpx; 
+   /* padding: 71rpx 0rpx;   */
+   padding: 100rpx 0rpx;  
   background-color: rgba(255, 255, 255, 0.88);
+  position: relative;
 }
 
 .panel-header .box {
@@ -390,4 +391,21 @@ page{
   overflow: hidden;
   text-overflow:ellipsis;
   white-space: nowrap;
+}
+.contact{
+  width:160rpx;
+  height: 80rpx;
+  margin-top:-100rpx;
+  opacity: 0;
+}
+.close{
+  width:25rpx;
+  height:25rpx;
+  /* margin-right:24rpx; */
+  padding:25rpx 24rpx 0rpx 24rpx;
+}
+.ab-colse{
+  position: absolute;
+  top:0rpx;
+  right: 2rpx;
 }
