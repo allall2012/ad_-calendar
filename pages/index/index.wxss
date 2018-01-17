@@ -393,7 +393,7 @@ page{
   white-space: nowrap;
 }
 .contact{
-  width:160rpx;
+  width:80rpx;
   height: 80rpx;
   margin-top:-100rpx;
   opacity: 0;

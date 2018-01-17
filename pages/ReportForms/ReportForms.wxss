@@ -14,11 +14,23 @@ page {
 
 .date-select {
   background: #fff;
+  
 }
 
-.date-select view {
+/* .date-select view {
   display: block;
   width: 120rpx;
+  height: 64rpx;
+  text-align: center;
+  background: #d3d7f4;
+  color: #fff;
+  border-radius: 5rpx;
+  margin-left: 54rpx;
+  margin-bottom:24rpx;
+  line-height: 64rpx;
+} */
+.date-select view {
+  width: 180rpx;
   height: 64rpx;
   text-align: center;
   background: #d3d7f4;
@@ -27,6 +39,10 @@ page {
   margin-right: 15rpx;
   line-height: 64rpx;
 }
+.date-select view.mr-0{
+  margin-right: 0rpx;
+}
+
 
 .active {
   background: #35307b !important;

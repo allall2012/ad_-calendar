@@ -31,6 +31,12 @@ page {
   width:92rpx;
   height:92rpx;
 }
+.mg1{
+  margin-left: 188rpx;
+}
+.mg2{
+  margin-left: 118rpx;
+}
 .wh_168{
   width:168rpx;
   height:168rpx;
@@ -124,7 +130,6 @@ page {
 .flex {
   flex-grow: 1;
 }
-
 .shrink {
   flex-shrink: 1;
 }

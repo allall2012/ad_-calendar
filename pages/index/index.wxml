@@ -115,13 +115,13 @@
         <image src='/image/icon_close.png' class="close" bindtap="close"></image>
       </view>
       <view class="box">
-        <view class="flex text-center">
+        <view class="text-center  {{no_article?'mg1':'flex'}}">
           <image src="/image/icon_delete.png" class="wh_92" bindtap="toDelete"></image>
         </view>
-        <view class="flex text-center">
+        <view class="text-center  {{no_article?'mg1':'flex'}}">
           <image src="/image/icon_bianji.png" class="wh_92" bindtap="toUpdate"></image>
         </view>
-        <view class="flex text-center" wx:if="{{!no_article}}">
+        <view class="text-center  {{no_article?'mg1':'flex'}}" wx:if="{{!no_article}}">
           <!-- <image src="/image/icon_back.png" bindtap="close" class="wh_92"></image> -->
           <image src="/image/icon_see.png" bindtap="toArticle" class="wh_92"></image>
           <button open-type="contact" class="contact" bindtap='toArticle'>123</button>

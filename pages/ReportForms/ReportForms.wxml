@@ -1,30 +1,30 @@
 <view class="header">
 
-  <view class="box bg-main m24 date-select " style='justify-content:space-between;'>
-    <block wx:if="{{todaySearch}}">
+  <view class="box bg-main m24 date-select">
+   <block wx:if="{{todaySearch}}">
       <view class="active fs24" bindtap="searchType" data-id="todaySearch">今日</view>
-    </block>
-    <block wx:else>
-      <view class="fs24" bindtap="searchType" data-id="todaySearch">今日</view>
-    </block>
-    <block wx:if="{{tomorrowSearch}}">
+   </block>
+   <block wx:else>
+    <view class="fs24" bindtap="searchType" data-id="todaySearch">今日</view>
+   </block>
+ <block wx:if="{{tomorrowSearch}}">
       <view class="active fs24" bindtap="searchType" data-id="tomorrowSearch">明日</view>
-    </block>
-    <block wx:else>
-      <view class="fs24" bindtap="searchType" data-id="tomorrowSearch">明日</view>
-    </block>
-    <block wx:if="{{weekSearch}}">
+   </block>
+   <block wx:else>
+    <view class="fs24" bindtap="searchType" data-id="tomorrowSearch">明日</view>
+   </block>
+   <block wx:if="{{weekSearch}}">
       <view class="active fs24" bindtap="searchType" data-id="weekSearch">本周</view>
-    </block>
-    <block wx:else>
-      <view class="fs24" bindtap="searchType" data-id="weekSearch">本周</view>
-    </block>
-    <block wx:if="{{monthSearch}}">
-      <view class="active fs24" bindtap="searchType" data-id="monthSearch">本月</view>
-    </block>
-    <block wx:else>
-      <view class="fs24" bindtap="searchType" data-id="monthSearch">本月</view>
-    </block>
+   </block>
+   <block wx:else>
+    <view class="fs24" bindtap="searchType" data-id="weekSearch">本周</view>
+   </block>
+   <block wx:if="{{monthSearch}}">
+      <view class="mr-0 active fs24" bindtap="searchType" data-id="monthSearch" >本月</view>
+   </block>
+   <block wx:else>
+    <view class="mr-0 fs24 " bindtap="searchType" data-id="monthSearch">本月</view>
+   </block>
   </view>
 
   <view class="data-search">
