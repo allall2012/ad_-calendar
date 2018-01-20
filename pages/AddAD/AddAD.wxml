@@ -23,7 +23,7 @@
           </view>
         </view>
         <view class="line box">
-          <view class="fs32">广告主体名称</view>
+          <view class="fs32">广告主</view>
           <view class="fs32 text-right">
             <input value="{{ad.ad_name}}" bindinput='adName' placeholder='名称' />
           </view>
@@ -31,10 +31,10 @@
         <view class="line box">
           <view class="fs32">广告位置</view>
           <view class="fs32 text-right">
-            <picker bindchange="bindPickerChange" value="{{index}}" range="{{array}}">
+            <picker bindchange="bindPickerChange" value="{{index}}" range="{{mpplaces}}" range-key="place_name">
               <image src='/image/icon_left_1.png' class="right-arrows pull-right"></image>
               <view class="picker pull-right">
-                {{array[index]}}
+                {{mpplaces[index].place_name}}
               </view>
             </picker>
           </view>

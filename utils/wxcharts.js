@@ -1929,6 +1929,7 @@ Event.prototype.trigger = function () {
 };
 
 var Charts = function Charts(opts) {
+  opts.colors = opts.colors || ['#ff5c92', '#37fad3', '#ffe327'];
     opts.title = opts.title || {};
     opts.subtitle = opts.subtitle || {};
     opts.yAxis = opts.yAxis || {};
@@ -1940,7 +1941,7 @@ var Charts = function Charts(opts) {
     config$$1.yAxisTitleWidth = opts.yAxis.disabled !== true && opts.yAxis.title ? config$$1.yAxisTitleWidth : 0;
     config$$1.pieChartLinePadding = opts.dataLabel === false ? 0 : config$$1.pieChartLinePadding;
     config$$1.pieChartTextPadding = opts.dataLabel === false ? 0 : config$$1.pieChartTextPadding;
-
+    config$$1.colors = opts.colors;
     this.opts = opts;
     this.config = config$$1;
     this.context = wx.createCanvasContext(opts.canvasId);

@@ -19,6 +19,8 @@ Page({
     ad:{},
     ad_id:'',
     mp_id:'',
+    mpinfo:'',
+    mpplaces:'',
     notice:'',//所有可以被通知的人
     selectNotice:'',//已选择的通知人
     needNotice:[],// 必须通知的人
@@ -44,14 +46,19 @@ Page({
     }
     var mpinfo = wx.getStorageSync('mpinfo');
     wx.setNavigationBarTitle({
-      title: mpinfo.name
+      title: mpinfo.name,
     })
+    this.setData({
+      mpinfo:mpinfo,
+      mpplaces:mpinfo.mpplaces
+      });
     wx.showLoading({
       'title': '加载中',
       'mask': true,
       success: function () {
       }
     });
+   
     app.getUserInfo(options);
     app.checkAuth();
     var times = setInterval(function () {
@@ -87,6 +94,9 @@ Page({
      
       }
     }, 100);
+  },
+  setPlaces:function(){
+
   },
   formatDate:function(date){
     var type = typeof(date);
@@ -145,7 +155,7 @@ Page({
             }
             temp3.push(val);
           }
-          console.log(temp3);
+          // console.log(temp3);
           that.setData({
             notice: temp3,
           });
@@ -170,20 +180,35 @@ Page({
         success: function (res) {
           if (res.data.errcode == 0) {
             //匹配广告位置
-            var index = 0;
-            switch(res.data.data.ad_place){
-              case 'master':
-                index=0;
-                break;
-              case 'minor':
-                index = 1;
-                break;
-              case 'present':
-                index = 2;
-                break;
-                default:
-                index = 0;
+            var index = -1;
+
+            var mpplaces = that.data.mpplaces;
+           
+            mpplaces.forEach(function(val,key){
+              if (val.id == res.data.data.ad_place_id || val.place_name == res.data.data.ad_place_name ){
+                index = key;
+              }
+            });
+            if(index<0){ //原位置信息已删除了
+              index = mpplaces.length;
+              mpplaces = mpplaces.concat({ place_name: res.data.data.ad_place_name });
+              that.setData({ mpplaces: mpplaces });
             }
+
+            console.log(index);
+            // switch(res.data.data.ad_place){
+            //   case 'master':
+            //     index=0;
+            //     break;
+            //   case 'minor':
+            //     index = 1;
+            //     break;
+            //   case 'present':
+            //     index = 2;
+            //     break;
+            //     default:
+            //     index = 0;
+            // }
 
             that.setData({
               ad: res.data.data,
@@ -203,12 +228,15 @@ Page({
       })
     }else{
       //初始化数据
+      var mpplaces = that.data.mpplaces;
       var ad = { 
         'fans': that.data.fansinfo,
         'is_book': 0, 
         'is_bill':1,
         'mp_id': that.data.mp_id,
         'ad_place':'master',
+        'ad_place_id':mpplaces[0].id,
+        'ad_place_name':mpplaces[0].place_name,
         'remark':''
       }
       that.setData({
@@ -359,26 +387,16 @@ Page({
   },
    bindPickerChange: function (e) {
      var ad = this.data.ad;
-     var ad_place = 'present';
+    var mpplaces = this.data.mpplaces;
      var index = parseInt(e.detail.value);
-     
-     switch (index) {
-       case 0:
-         ad_place = 'master';
-         break;
-       case 1:
-         ad_place = 'minor';
-         break;
-       case 2:
-         ad_place = 'present';
-         break;
-     }
-     
-     if (ad_place == 'present'){
-       ad.ad_price = 0; 
-     }
-     ad.ad_place = ad_place;
-     console.log(index,ad_place);
+
+      ad.ad_place_id = mpplaces[index].id || 0 ;
+      ad.ad_place_name = mpplaces[index].place_name || '';
+    //  if (ad_place == 'present'){
+    //    ad.ad_price = 0; 
+    //  }
+    //  ad.ad_place = ad_place;
+     console.log(index,ad);
     this.setData({
       index: e.detail.value,
       ad:ad,

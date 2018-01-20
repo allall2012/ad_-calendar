@@ -74,18 +74,12 @@
 
 <view class="bg-color mt_20">
   <view class="sign-explain plr_25">
+    <block wx:for="{{mpplaces}}">
     <view class="pull-right">
-      <view class="pull-right">赠送</view>
-      <view class="pull-right sign sign-3"></view>
+      <view class="pull-right">{{item.place_name}}</view>
+      <view class="pull-right sign" style="background:{{item.color}};margin-left:30rpx;"></view>
     </view>
-    <view class="pull-right">
-      <view class="pull-right mr_40">次图</view>
-      <view class="pull-right sign sign-2"></view>
-    </view>
-    <view class="pull-right">
-      <view class="pull-right mr_40">头图</view>
-      <view class="pull-right sign sign-1"></view>
-    </view>
+    </block>
   </view>
   <view class="list plr_25" wx:for="{{ad_day}}" wx:key="" wx:for-index="index">
     <view class="info mt_20" bindtap="onPress" data-ad_id="{{item.id}}" data-index="{{index}}">

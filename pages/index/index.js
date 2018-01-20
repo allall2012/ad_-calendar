@@ -135,8 +135,7 @@ const conf = {
         }, 1000);
         that.getFansInfo();
         that.getMp();
-        that.getAd(cur_year,cur_month);
-        that.getArticle(cur_year, cur_month);
+
         wx.getSystemInfo({
           success: function (res) {
             that.setData({
@@ -170,9 +169,18 @@ const conf = {
       },
       success: function (res) {
         if (res.data.errcode == 0) {
+          var mpinfo = res.data.data;
+          var mpplaces = JSON.stringify(mpinfo.mpplaces);
+          mpplaces = JSON.parse(mpplaces).reverse()
+          // console.log(mpplaces, mpinfo, res.data.data);
           that.setData({
-            mpinfo: res.data.data
+            mpinfo: res.data.data,
+            mpplaces:mpplaces
           });
+          var cur_year = that.data.cur_year;
+          var cur_month = that.data.cur_month;
+          that.getAd(cur_year, cur_month);
+          that.getArticle(cur_year, cur_month);
           wx.setNavigationBarTitle({
             title: res.data.data.name
           })
@@ -180,6 +188,8 @@ const conf = {
             wx.setStorageSync('mpinfo', res.data.data)
           } catch (e) {
           }
+
+
         }
       }
     })
@@ -292,8 +302,8 @@ const conf = {
 
           that.setIcon();
 
-          var dayIcon = that.data.dayIcon;
-          var targetDate = that.data.targetDate;
+          // var dayIcon = that.data.dayIcon;
+          // var targetDate = that.data.targetDate;
         
 
 
@@ -325,7 +335,9 @@ const conf = {
     for (var i in countInfos) {
       //为目标日期加上选中状态 
         if (targetDate == countInfos[i].date){
-          that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
+
+           that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
+
         }else{
           that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
         }
@@ -594,7 +606,11 @@ const conf = {
           elHeight = screenWidth * 80 / 750;
           console.log("width :" + elWidth)
         }
-      
+        var colors = new Array();
+        var mpplaces =  this.data.mpinfo.mpplaces;
+        mpplaces.forEach(function(val){
+        colors.push(val.color);
+        });
         pieChart = new wxCharts({
           canvasId: 'canvas_' + date,
           type: 'ring',
@@ -609,6 +625,7 @@ const conf = {
             name: '赠送',
             data: giveCount,
           }],
+          colors:colors,
           width: elWidth ,
           height: elHeight,
           legend: false,
