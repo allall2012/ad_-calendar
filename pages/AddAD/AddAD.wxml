@@ -74,8 +74,23 @@
         <view class="line box">
           <view class="fs32">备注</view>
           <view class="fs32 text-right">
-            <!-- <textarea bindinput='remark' auto-height placeholder="备注" value="{{ad.remark}}" /> -->
             <input value="{{ad.remark}}" bindinput='remark' placeholder='备注' />
+          </view>
+        </view>
+        <view class="line box" wx:for="{{labels}}" wx:key="" wx:for-index="index">
+          <view class="fs32">{{item.label_name}}</view>
+          <view class="fs32 text-right">
+            <block wx:if="{{item.label_type == 'text' || item.label_type == 'digit'}}">
+              <input value="{{item.value}}" type="{{item.label_type}}" bindinput='labels' data-index="{{index}}" data-label="label_{{item.id}}" placeholder='{{item.label_name}}' />
+            </block>
+            <block wx:elif="{{item.label_type == 'radio'}}">
+              <radio-group class="radio-group" bindchange="labels" data-index="{{index}}" data-label="label_{{item.id}}">
+                <label class="radio">
+                  <radio value="1" checked="{{item.value == 1 ? 'checked' : ''}}" color="#857cff" />是</label>
+                <label class="radio">
+                  <radio value="0" checked="{{item.value == 0 ? 'checked' : ''}}" color="#857cff" />否</label>
+              </radio-group>
+            </block>
           </view>
         </view>
 

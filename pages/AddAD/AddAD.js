@@ -27,7 +27,9 @@ Page({
     fansinfo:'',//自己的个人信息
     checkBox:[],//勾选的 通知人
     is_submit:false,
-    scene:''
+    scene:'',
+    companyinfo:'',
+    labels:''
   },
 
   /**
@@ -90,10 +92,43 @@ Page({
           ad_id: ad_id,
         });
         
-        that.getAd();
+      
+        that.getCompanyInfo();
      
       }
     }, 100);
+  },
+  getCompanyInfo:function(){
+    var that = this;
+    var mpinfo = this.data.mpinfo;
+    var company_id = mpinfo.company_id;
+    wx.request({
+      url: that.data.domain + '/api/company/' + company_id,
+      data: {
+        rd_session: that.data.rd_session,
+        mp_id: that.data.mp_id,
+      },
+      success:function(res){
+        if(res.data.errcode == 0){
+          var labels = res.data.data.labels || [];
+          labels.forEach(function(val){
+            if(val.label_type == 'radio'){
+              val.value = 1;
+            }
+          });
+          that.setData({
+            companyinfo:res.data.data,
+            labels:labels
+          });
+          that.getAd();
+        }else{
+          wx.showModal({
+            title: '提示',
+            content: res.data.errmsg,
+          })
+        }
+      }
+    })
   },
   setPlaces:function(){
 
@@ -195,7 +230,20 @@ Page({
               that.setData({ mpplaces: mpplaces });
             }
 
-            console.log(index);
+            var labels = that.data.labels;
+            var extend = res.data.data.extend || [];
+            labels.forEach(function(val){
+              val.value = '';
+              extend.every(function(val2){
+                if(val.id == val2.id || val.label_name == val2.label_name){
+                  val.value = val2.value;
+                  return false;//跳出内循环体
+                }
+                return true;
+              });
+            });
+            that.setData({labels:labels});
+            console.log(labels);
             // switch(res.data.data.ad_place){
             //   case 'master':
             //     index=0;
@@ -296,7 +344,10 @@ Page({
     wx.showLoading({
       title: '提交中',
     });
-
+    var label = this.data.labels;
+    ad.extend = label;
+    // console.log(ad);
+    // return;
     wx.request({
       url: that.data.domain + '/api/ad',
       method: 'POST',
@@ -353,6 +404,22 @@ Page({
       ad: ad,
     })
   },
+  labels:function(e){
+    var label_en = e.currentTarget.dataset.label;
+    var index = e.currentTarget.dataset.index;
+    var value = e.detail.value;
+    console.log(e);
+    // var ad = this.data.ad;
+    // var extend = ad.extend;
+    var labels = this.data.labels;
+    labels[index].value = value;
+    this.setData({
+      labels:labels
+    });
+    // console.log(labels);
+    // currentTarget
+    // console.log(e,label_en);
+  },
   adPrice: function (e) {
     console.log(e.detail.value);
     var ad = this.data.ad;
@@ -396,7 +463,7 @@ Page({
     //    ad.ad_price = 0; 
     //  }
     //  ad.ad_place = ad_place;
-     console.log(index,ad);
+    //  console.log(index,ad);
     this.setData({
       index: e.detail.value,
       ad:ad,
@@ -438,7 +505,7 @@ Page({
           temp2.push(val);
       });
       var needNotice = this.data.needNotice;
-      console.log(needNotice);
+      // console.log(needNotice);
       selectNotice = this.data.needNotice.concat(selectNotice);
     this.setData({
         selectNotice:selectNotice,

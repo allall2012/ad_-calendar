@@ -256,38 +256,71 @@ const conf = {
           var countInfo = new Array();
           var temp = new Array();
           var adsDate = new Array();
+          var mpplaces = that.data.mpinfo.mpplaces;
+          var series = new Array();
+          mpplaces.forEach(function(val){
+            series.push({
+                name:val.place_name,
+                data:0
+                })
+          });
           ads.forEach(function(val){
             if (adsDate[val.publish_at] == undefined) {
               adsDate[val.publish_at] = new Array();
             }
-            switch (val.ad_place){
-              case 'master':
-                val.flag = 'red';
-                break;
-                case 'minor':
-                val.flag = 'green';
-                break;
-                case 'present':
-                val.flag = 'yellow';
-                break;
-            }
+            // switch (val.ad_place){
+            //   case 'master':
+            //     val.flag = 'red';
+            //     break;
+            //     case 'minor':
+            //     val.flag = 'green';
+            //     break;
+            //     case 'present':
+            //     val.flag = 'yellow';
+            //     break;
+            // }
+
+            //小图标
+           
+            mpplaces.forEach(function(mpplace){
+              if (mpplace.id == val.ad_place_id || mpplace.place_name == val.ad_place_name){
+                val.flag = mpplace.color.substring(1,7);
+              }
+            });
+          
             adsDate[val.publish_at].push(val);
+            // if(temp[val.publish_at] == undefined){
+            //   temp[val.publish_at] = {
+            //     date:val.publish_at,
+            //     firstCount: 0,
+            //     secondCount: 0,
+            //     giveCount: 0
+            //   };
+            // }
+            var series2 = JSON.parse(JSON.stringify(series));//深拷贝
             if(temp[val.publish_at] == undefined){
               temp[val.publish_at] = {
                 date:val.publish_at,
-                firstCount: 0,
-                secondCount: 0,
-                giveCount: 0
+                series: series2
               };
             }
-            if (val.ad_place == 'master') {
-              temp[val.publish_at].firstCount += 1;
-            } else if (val.ad_place == 'minor') {
-              temp[val.publish_at].secondCount += 1;
-            } else if (val.ad_place == 'present') {
-              temp[val.publish_at].giveCount += 1;
-            }
+
+            temp[val.publish_at].series.forEach(function(ser){
+              if(val.ad_place_name == ser.name){
+                ser.data +=1;
+              }
+            });
+            // if (val.ad_place == 'master') {
+            //   temp[val.publish_at].firstCount += 1;
+            // } else if (val.ad_place == 'minor') {
+            //   temp[val.publish_at].secondCount += 1;
+            // } else if (val.ad_place == 'present') {
+            //   temp[val.publish_at].giveCount += 1;
+            // }
+
+
           });
+
           for(var item in temp){
             countInfo.push(temp[item]);
           }
@@ -297,7 +330,7 @@ const conf = {
              adsDate:adsDate,
              countInfo:countInfo,
           });
-
+          that.setColors();
           that.getAdDay(that.data.targetDate);
 
           that.setIcon();
@@ -336,12 +369,21 @@ const conf = {
       //为目标日期加上选中状态 
         if (targetDate == countInfos[i].date){
 
-           that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
+          that.addCharts(countInfos[i].date, countInfos[i].series, '#6b62f1', '#ffffff', false);
 
         }else{
-          that.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
+          that.addCharts(countInfos[i].date,countInfos[i].series,'#ffffff', '#35307b', false);
         }
     }
+  },
+  setColors(){
+    var mpplaces = this.data.mpinfo.mpplaces;
+    var colors = new Array();
+    mpplaces.forEach(function(val){
+      colors.push(val.color);
+    })
+    console.log(mpplaces,colors);
+    this.setData({colors});
   },
   getThisMonthDays(year, month) {
     console.log(new Date(year, month, 0).getDate());
@@ -580,7 +622,7 @@ const conf = {
       no_article: no_article
     });
   },
-  addCharts(date, firstCount, secondCount, giveCount, backgroundColor, foreColor,isTapChart) {
+  addCharts(date, series, backgroundColor, foreColor,isTapChart) {
     var that = this;
     var days = date.split('-');
     var day = days[days.length - 1];
@@ -606,25 +648,11 @@ const conf = {
           elHeight = screenWidth * 80 / 750;
           console.log("width :" + elWidth)
         }
-        var colors = new Array();
-        var mpplaces =  this.data.mpinfo.mpplaces;
-        mpplaces.forEach(function(val){
-        colors.push(val.color);
-        });
+        var colors = this.data.colors;
         pieChart = new wxCharts({
           canvasId: 'canvas_' + date,
           type: 'ring',
-          series: [           
-            {
-            name: '头图',
-            data: firstCount,
-          }, {
-            name: '次图',
-            data: secondCount,
-          }, {
-            name: '赠送',
-            data: giveCount,
-          }],
+          series: series,
           colors:colors,
           width: elWidth ,
           height: elHeight,
@@ -698,11 +726,11 @@ const conf = {
     var showState = 'block';
     for (var i in countInfos) {
       if (countInfos[i].date == objectId) {
-        this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#6b62f1', '#ffffff', false);
+        this.addCharts(countInfos[i].date, countInfos[i].series, '#6b62f1', '#ffffff', false);
         showState = 'hidden';
       }
       else {
-        this.addCharts(countInfos[i].date, countInfos[i].firstCount, countInfos[i].secondCount, countInfos[i].giveCount, '#ffffff', '#35307b', false);
+        this.addCharts(countInfos[i].date, countInfos[i].series, '#ffffff', '#35307b', false);
       }
     }
     if(objectId == that.data.targetDate){

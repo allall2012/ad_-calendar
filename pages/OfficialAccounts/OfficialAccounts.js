@@ -11,7 +11,8 @@ Page({
     domain:'',
     rd_session:'',
     mps:'',//原始数据
-    mpsed:''//已转换过的 数据
+    mpsed:'',//已转换过的 数据
+    fansinfo:''
   },
 
   /**
@@ -37,6 +38,7 @@ Page({
         //获取用户详细信息
         app.getFansInfo(userinfo.rd_session);
 
+
         that.setData({
           domain: app.globalData.domain,
           rd_session: userinfo.rd_session,
@@ -51,6 +53,7 @@ Page({
     }, 100);
 
   },
+
   getMps:function(){
     var that = this;
     wx.request({
@@ -98,6 +101,8 @@ Page({
     })
 
   },
+
+
   /**
    * 生命周期函数--监听页面初次渲染完成
    */
