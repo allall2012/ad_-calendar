@@ -1,66 +1,77 @@
-page{
-  background:#9f9dd4; 
+page {
+  background: #9f9dd4;
 }
-.container{
-  margin:25rpx;
-  border-radius:10rpx;
-  background:#fff;
-  padding:7rpx 25rpx 32rpx 25rpx;
+
+.container {
+  margin: 25rpx;
+  border-radius: 10rpx;
+  background: #fff;
+  padding: 7rpx 25rpx 32rpx 25rpx;
 }
-.close{
-  width:25rpx;
-  height:25rpx;
+
+.close {
+  width: 25rpx;
+  height: 25rpx;
   /* margin-right:24rpx; */
-  padding:25rpx 24rpx 0rpx 24rpx;
+  padding: 25rpx 24rpx 0rpx 24rpx;
 }
-.form{
-  margin:0rpx 30rpx;
+
+.form {
+ 
 }
-.line{
-  height:100rpx;
-  border-bottom:1rpx solid #eaeef5;
-  justify-content:space-between;
-  align-items:center;
+
+.line {
+  height: 100rpx;
+  border-bottom: 1rpx solid #eaeef5;
+  justify-content: space-between;
+  align-items: center;
+  padding-left: 35rpx;
+  padding-right: 35rpx;
 }
-.lh100{
-  line-height:100rpx;
+.lh100 {
+  line-height: 100rpx;
 }
+
 .radio .wx-radio-input {
-  border:1px solid #857cff;
-  width:32rpx;
-  height:32rpx;  
+  border: 1px solid #857cff;
+  width: 32rpx;
+  height: 32rpx;
 }
-.picker{
-  color:#857cff;
+
+.picker {
+  color: #857cff;
 }
-.right-arrows{
-  width:11rpx;
-  height:21rpx;
-  margin:13rpx 17rpx!important;
+
+.right-arrows {
+  width: 11rpx;
+  height: 21rpx;
+  margin: 13rpx 17rpx !important;
 }
-.icon{
-  width:64rpx;
-  height:64rpx;
-  border:1px solid #857cff;
+
+.icon {
+  width: 64rpx;
+  height: 64rpx;
+  border: 1px solid #857cff;
   border-radius: 50%;
 }
-.list{
- width:95rpx;
- text-align: center;
- float: left;
+
+.list {
+  width: 95rpx;
+  text-align: center;
+  float: left;
 }
 
-
-.select-list{
-  font-size:32rpx;
+.select-list {
+  font-size: 32rpx;
   line-height: 110rpx;
   display: flex;
-  border-bottom:1px solid #eaeef5;
-  height:110rpx;
-   align-items:center;
+  border-bottom: 1px solid #eaeef5;
+  height: 110rpx;
+  align-items: center;
 }
-.select-list > label{
- width: 100%; 
+
+.select-list > label {
+  width: 100%;
 }
 
 .modal-mask {
@@ -76,17 +87,17 @@ page{
   color: #fff;
 }
 
-.dialog-container{
-  
+.dialog-container {
 }
-.modal-dialog {  
-  width:100%;
-  height:1100rpx;
+
+.modal-dialog {
+  width: 100%;
+  height: 1100rpx;
   display: block;
   overflow: hidden;
   position: fixed;
-  top:20rpx;
-  left:25rpx;
+  top: 20rpx;
+  left: 25rpx;
   z-index: 9999;
   background: #f9f9f9;
   border-radius: 10rpx;
@@ -110,7 +121,6 @@ page{
   border-radius: 4rpx;
   font-size: 28rpx;
 }
-
 
 .input {
   width: 100%;
@@ -149,14 +159,107 @@ input-holder {
   text-align: center;
 }
 
-.radio-group >label{
+.radio-group >label {
   margin-right: 40rpx;
 }
-.remark{
+
+.remark {
   min-height: 100rpx;
   height: auto;
 }
-.remark textarea{
+
+.remark textarea {
   padding: 10rpx 0;
   width: 500rpx;
+}
+.adname{
+ position: relative;
+ z-index: 999;
+ border-radius:8rpx 8rpx 0 0;
+}
+
+.tanc-mask{
+  width: 100%;
+  height: 100%;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background: rgba(0,0,0,0.6);
+  z-index: 999;
+}
+.tanc {
+width: 100%;
+height: 285rpx;
+background-color: #fff;
+border-radius: 0 0 8rpx 8rpx;
+position: absolute;
+top: 100rpx;
+left: 0;
+z-index: 888;
+}
+
+.scl-txt {
+height: 94rpx;
+width: 580rpx;
+text-align: left;
+overflow: hidden;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+scroll-view {
+box-sizing: border-box;
+padding-left: 35rpx;
+/* padding-right: 35rpx; */
+}
+
+.scrl-item {
+display: flex;
+justify-content: space-between;
+height: 94rpx;
+}
+
+.opa-btn {
+width: 80rpx;
+height: 94rpx;
+ /* background-color: red;  */
+}
+
+.clo {
+width: 28rpx;
+height: 28rpx;
+margin: 33rpx 25rpx 0 0;
+/* margin-top: 33rpx; */
+}
+.scrl-item .icon-l {
+width: 6rpx;
+height: 30rpx;
+border-radius: 3rpx;
+ background: #6c62f2; 
+/* background: #000000; */
+display: inline-block;
+vertical-align: middle;
+margin-right: 12rpx;
+}
+.scrl-item text {
+vertical-align: middle;
+height: 94rpx;
+line-height: 94rpx;
+color: black;
+}
+
+.scrl-item .txt-1 {
+font-weight: bold;
+font-size: 30rpx;
+color:#35307b;
+margin-right: 20rpx;
+}
+
+.scrl-item .txt-2 {
+font-size: 26rpx;
+color: #999;
+}
+.pad35{
+padding-left: 35rpx;
+padding-right: 35rpx;
 }

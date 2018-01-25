@@ -1,5 +1,6 @@
 <view class="{{addPanelState}}">
   <view class="container">
+    <view class='tanc-mask' wx:if="{{status}}" bindtap='closeTanc'></view>
     <view class="text-right">
       <!-- <navigator url='/pages/index/index' hover-class="none" open-type="redirect"> -->
       <image src='/image/icon_close.png' class="close" bindtap="toClose"></image>
@@ -22,19 +23,37 @@
             </picker>
           </view>
         </view>
-        <view class="line box">
+        <view class="line box adname ">
           <view class="fs32">广告主</view>
           <view class="fs32 text-right">
-            <input value="{{ad.ad_name}}" bindinput='adName' placeholder='名称' />
+            <input bindinput='adName' value="{{ad.ad_name}}" bindfocus='show2' placeholder='名称' />
+            <!-- <input value="{{ad.ad_name}}" bindinput='adName'  value="{{input_val}}" placeholder='名称' /> -->
+          </view>
+          <view class='tanc' hover-stop-propagation='true' wx:if="{{status}}">
+            <scroll-view scroll-y style="height: 282rpx;">
+              <view class="scrl-item" wx:for="{{adnames}}" wx:for-item="itemName">
+                <view class='scl-txt' bindtap='getText' data-text="{{itemName.custom_name}}">
+
+                  <view class='icon-l' style="background:{{itemName.color}}"></view>
+                  <text class='txt-1'>{{itemName.custom_name}}</text>
+                  <text class='txt-2'>{{itemName.use_at}}</text>
+
+                  <!-- <text>{{itemName.custom_name}}</text> -->
+                </view>
+                <view class='opa-btn' wx:if="{{fansinfo.role == 'admin'}}" bindtap='shield' data-id="{{itemName.id}}">
+                  <image class='clo' src='/image/delete.png'></image>
+                </view>
+              </view>
+            </scroll-view>
           </view>
         </view>
         <view class="line box">
           <view class="fs32">广告位置</view>
           <view class="fs32 text-right">
-            <picker bindchange="bindPickerChange" value="{{index}}" range="{{mpplaces}}" range-key="place_name">
+            <picker bindchange="bindPickerChange" value="{{place_index}}" range="{{mpplaces}}" range-key="place_name">
               <image src='/image/icon_left_1.png' class="right-arrows pull-right"></image>
               <view class="picker pull-right">
-                {{mpplaces[index].place_name}}
+                {{mpplaces[place_index].place_name}}
               </view>
             </picker>
           </view>
@@ -77,27 +96,36 @@
             <input value="{{ad.remark}}" bindinput='remark' placeholder='备注' />
           </view>
         </view>
-        <view class="line box" wx:for="{{labels}}" wx:key="" wx:for-index="index">
+        <view class="line box" wx:for="{{labels}}" wx:key="" wx:for-index="index2">
           <view class="fs32">{{item.label_name}}</view>
           <view class="fs32 text-right">
             <block wx:if="{{item.label_type == 'text' || item.label_type == 'digit'}}">
-              <input value="{{item.value}}" type="{{item.label_type}}" bindinput='labels' data-index="{{index}}" data-label="label_{{item.id}}" placeholder='{{item.label_name}}' />
+              <input value="{{item.value}}" type="{{item.label_type}}" bindinput='labels' data-index="{{index2}}" data-label="label_{{item.id}}" placeholder='{{item.label_name}}' />
             </block>
-            <block wx:elif="{{item.label_type == 'radio'}}">
-              <radio-group class="radio-group" bindchange="labels" data-index="{{index}}" data-label="label_{{item.id}}">
-                <label class="radio">
-                  <radio value="1" checked="{{item.value == 1 ? 'checked' : ''}}" color="#857cff" />是</label>
-                <label class="radio">
-                  <radio value="0" checked="{{item.value == 0 ? 'checked' : ''}}" color="#857cff" />否</label>
-              </radio-group>
+            <block wx:elif="{{item.label_type == 'select'}}">
+              <block wx:if="{{item.label_option.length == 2}}">
+                <radio-group class="radio-group" bindchange="labels" data-index="{{index2}}" data-label="label_{{item.id}}">
+                  <block wx:for="{{item.label_option}}" wx:for-item="option" wx:key=''>
+                    <label class="radio">
+                      <radio value="{{option}}" checked="{{item.value == option ? 'checked' : ''}}" color="#857cff" />{{option}}</label>
+                  </block>
+                </radio-group>
+              </block>
+              <block wx:elif="{{item.label_option.length > 2}}">
+                <picker bindchange="labels" range="{{item.label_option}}" value="{{item.label_index}}" data-index="{{index2}}" data-label="label_{{item.id}}">
+                  <image src='/image/icon_left_1.png' class="right-arrows pull-right"></image>
+                  <view class="picker pull-right">
+                    {{item.label_option[item.label_index]}}
+                  </view>
+                </picker>
+              </block>
             </block>
           </view>
         </view>
-
-        <view class='box'>
+        <view class='box pad35'>
           <view class="fs32 lh100">通知谁</view>
         </view>
-        <view class="box">
+        <view class="box pad35">
           <view style='width:100%'>
             <view class="list" wx:for="{{selectNotice}}" wx:key="">
               <image src="{{item.avatar_url}}" class='icon'></image>

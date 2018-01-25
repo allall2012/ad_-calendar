@@ -50,7 +50,7 @@ const conf = {
     no_data:false,//当日有无广告
     no_article:false,//有无图文
     dayIcon:'',//当日 广告图标占比
-    countInfo: [],
+    countInfo: '',
     scene:'',
     screenWidth:''
   },
@@ -253,7 +253,7 @@ const conf = {
       success: function (res) {
         if (res.data.errcode == 0) {
           var ads = res.data.data;
-          var countInfo = new Array();
+         
           var temp = new Array();
           var adsDate = new Array();
           var mpplaces = that.data.mpinfo.mpplaces;
@@ -261,24 +261,15 @@ const conf = {
           mpplaces.forEach(function(val){
             series.push({
                 name:val.place_name,
-                data:0
+                data:0,
+                id:val.id
                 })
           });
           ads.forEach(function(val){
             if (adsDate[val.publish_at] == undefined) {
               adsDate[val.publish_at] = new Array();
             }
-            // switch (val.ad_place){
-            //   case 'master':
-            //     val.flag = 'red';
-            //     break;
-            //     case 'minor':
-            //     val.flag = 'green';
-            //     break;
-            //     case 'present':
-            //     val.flag = 'yellow';
-            //     break;
-            // }
+
 
             //小图标
            
@@ -289,14 +280,7 @@ const conf = {
             });
           
             adsDate[val.publish_at].push(val);
-            // if(temp[val.publish_at] == undefined){
-            //   temp[val.publish_at] = {
-            //     date:val.publish_at,
-            //     firstCount: 0,
-            //     secondCount: 0,
-            //     giveCount: 0
-            //   };
-            // }
+
             var series2 = JSON.parse(JSON.stringify(series));//深拷贝
             if(temp[val.publish_at] == undefined){
               temp[val.publish_at] = {
@@ -304,27 +288,21 @@ const conf = {
                 series: series2
               };
             }
-
+           
             temp[val.publish_at].series.forEach(function(ser){
-              if(val.ad_place_name == ser.name){
+              if(val.ad_place_id == ser.id){
                 ser.data +=1;
               }
             });
-            // if (val.ad_place == 'master') {
-            //   temp[val.publish_at].firstCount += 1;
-            // } else if (val.ad_place == 'minor') {
-            //   temp[val.publish_at].secondCount += 1;
-            // } else if (val.ad_place == 'present') {
-            //   temp[val.publish_at].giveCount += 1;
-            // }
+
 
 
           });
-
+        
+          var countInfo = new Array();
           for(var item in temp){
-            countInfo.push(temp[item]);
+              countInfo.push(temp[item]);
           }
-          // var ad_day = adsDate[that.data.targetDate] || [];
            that.setData({
              ads: res.data.data,
              adsDate:adsDate,
@@ -332,7 +310,6 @@ const conf = {
           });
           that.setColors();
           that.getAdDay(that.data.targetDate);
-
           that.setIcon();
 
           // var dayIcon = that.data.dayIcon;
@@ -366,15 +343,18 @@ const conf = {
     var countInfos = that.data.countInfo;
     var targetDate = that.data.targetDate;
     for (var i in countInfos) {
-      //为目标日期加上选中状态 
-        if (targetDate == countInfos[i].date){
-
+      // console.log(typeof (countInfos[i].date), countInfos[i].series);
+      var temp = countInfos[i] || '';
+      if(temp != ''){
+        //为目标日期加上选中状态 
+        if (targetDate == countInfos[i].date) {
           that.addCharts(countInfos[i].date, countInfos[i].series, '#6b62f1', '#ffffff', false);
-
-        }else{
-          that.addCharts(countInfos[i].date,countInfos[i].series,'#ffffff', '#35307b', false);
+        } else {
+          that.addCharts(countInfos[i].date, countInfos[i].series, '#ffffff', '#35307b', false);
         }
+      }
     }
+    // console.log(countInfos);
   },
   setColors(){
     var mpplaces = this.data.mpinfo.mpplaces;
@@ -382,7 +362,7 @@ const conf = {
     mpplaces.forEach(function(val){
       colors.push(val.color);
     })
-    console.log(mpplaces,colors);
+    // console.log(mpplaces,colors);
     this.setData({colors});
   },
   getThisMonthDays(year, month) {
@@ -415,37 +395,6 @@ const conf = {
     }
    
 
-  },
-  // 触摸开始事件
-  touchStart: function (e) {
-    touchDot = e.touches[0].pageX; // 获取触摸时的原点
-    // 使用js计时器记录时间    
-    // interval = setInterval(function () {
-    //   time++;
-    // }, 100);
-  },
-  // 触摸移动事件
-  touchMove: function (e) {
-    touchMove = e.touches[0].pageX;
-    console.log("touchMove:" + touchMove + " touchDot:" + touchDot + " diff:" + (touchMove - touchDot));
-    // 向左滑动   
-    if (touchMove - touchDot <= -40 && time < 10 && !lock) {
-      this.handleCalendar2('next');
-      lock = true;
-    }
-    // 向右滑动
-    if (touchMove - touchDot >= 40 && time < 10 && !lock) {
-      this.handleCalendar2('prev');
-      lock = true;
-    }
-    // touchDot = touchMove; //每移动一次把上一次的点作为原点（好像没啥用）
-  },
-  // 触摸结束事件
-  touchEnd: function (e) {
-   // clearInterval(interval); // 清除setInterval
-    lock = false;
-
-    time = 0;
   },
   calculateDays(year, month) {
     let days = [];
@@ -627,15 +576,15 @@ const conf = {
     var days = date.split('-');
     var day = days[days.length - 1];
     var windowWidth = 80;
-    try {
-      var res = wx.getSystemInfoSync();
-      windowWidth = res.windowWidth;
-    } catch (e) {
-      console.error('getSystemInfoSync failed!');
-    }
+    // try {
+    //   var res = wx.getSystemInfoSync();
+    //   windowWidth = res.windowWidth;
+    // } catch (e) {
+    //   console.error('getSystemInfoSync failed!');
+    // }
    
     // var screenWidth = 0;
-
+        // console.log(date,series);
         var screenWidth = that.data.screenWidth;
         var left = (screenWidth * 78 / 750) / 2;
         var top = (screenWidth * 78 / 750) / 2;

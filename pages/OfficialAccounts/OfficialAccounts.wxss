@@ -5,8 +5,6 @@ page {
   margin: 24rpx;
   margin-top: 6rpx;
   height: 100%;
-  margin-bottom: 200rpx;
-  padding-bottom: 200rpx;
 }
 .offcialAccount {
   /* flex-direction: row;   */

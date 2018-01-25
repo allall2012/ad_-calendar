@@ -1,4 +1,4 @@
-<view class="clearfix bg-white">
+ <view class="bg-white" style='padding-bottom:20rpx;'> 
   <view class="flex box box-tb box-align-center" style="height:{{}};">
     <view class="calendar pink-color box box-tb">
       <view class="top-handle fs28 box box-lr box-align-center box-pack-center">
@@ -39,15 +39,16 @@
               <view class="day-style">{{item.day}}</view>
             </block>
             <!-- 加上比例图表 -->
-             <!-- <block wx:for="{{countInfo}}" wx:for-item="countItem" wx:key="">
-              <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==countItem.date}}"> -->
+            <block wx:for="{{countInfo}}" wx:for-item="countItem" wx:key="">
+              <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==countItem.date}}">
+                <canvas canvas-id="canvas_{{countItem.date}}" data-id="canvas_{{countItem.date}}" class="canvas" bindtap="canvastap"></canvas>
+              </block>
+            </block>
 
-                <!-- <canvas canvas-id="canvas_{{countItem.date}}" data-id="canvas_{{countItem.date}}" class="canvas" bindtap="canvastap"></canvas>  -->
 
-                 <canvas canvas-id="canvas_{{cur_year+'-'+cur_month+'-'+item.day}}" data-id="canvas_{{cur_year+'-'+cur_month+'-'+item.day}}" class="canvas" bindtap="canvastap"></canvas> 
-
-               <!-- </block>
-            </block>  -->
+            <!-- <block wx:if="{{countInfo[item.day].date}}"> 
+              <canvas canvas-id="canvas_{{cur_year+'-'+cur_month+'-'+item.day}}" data-id="canvas_{{cur_year+'-'+cur_month+'-'+item.day}}" class="canvas" bindtap="canvastap"></canvas>
+             </block>  -->
 
             <!-- 加上今日标识-->
             <block wx:if="{{cur_year+'-'+cur_month+'-'+item.day==curr_time}}">
@@ -77,17 +78,29 @@
 </view>
 
 <view class="bg-color mt_20">
-  <view class="sign-explain plr_25">
-    <block wx:for="{{mpplaces}}" wx:key="">
-    <view class="pull-right">
-      <view class="pull-right">{{item.place_name}}</view>
-      <view class="pull-right sign" style="background:{{item.color}};margin-left:30rpx;"></view>
-    </view>
-    </block>
-  </view>
+
+   <view class="sign-explain plr_25">
+      <block wx:for="{{mpplaces}}" wx:key="">
+        <view class="pull-right">
+          <view class="pull-right">{{item.place_name}}</view>
+          <view class="pull-right sign" style="background:{{item.color}};margin-left:30rpx;"></view>
+        </view>
+      </block>
+  </view> 
+
+
+    <!-- <scroll-view class="sign-explain plr_25" scroll-x scoll-y>
+      <block wx:for="{{mpplaces}}" wx:key="">
+        <view class='inline'>
+          <view class='inline'>{{item.place_name}}</view>
+          <view class="inline sign" style="background:{{item.color}};margin-left:30rpx;"></view>
+        </view>
+      </block>
+    </scroll-view> -->
+
   <view class="list plr_25" wx:for="{{ad_day}}" wx:key="" wx:for-index="index">
     <view class="info mt_20" bindtap="onPress" data-ad_id="{{item.id}}" data-index="{{index}}">
-      <!-- <image src="/image/icon_{{item.flag}}.png" class="flag"></image> -->
+      <image src="/image/icon_{{item.flag}}.png" class="flag"></image>
       <view class="info-header clearfix">
         <view class="pull-left">
           <view class="pull-left title">{{item.ad_name}}</view>
@@ -120,7 +133,6 @@
           <image src="/image/icon_bianji.png" class="wh_92" bindtap="toUpdate"></image>
         </view>
         <view class="text-center  {{no_article?'mg1':'flex'}}" wx:if="{{!no_article}}">
-           <image src="/image/icon_back.png" bindtap="close" class="wh_92"></image> 
           <image src="/image/icon_see.png" bindtap="toArticle" class="wh_92"></image>
           <button open-type="contact" class="contact" bindtap='toArticle'>123</button>
         </view>
